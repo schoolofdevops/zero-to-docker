@@ -1,0 +1,42 @@
+Docker Primer
+
+	Chapter xx  : Introduction to Containers and Docker
+	Chapter xx  : Microservices Architecture and Docker
+	Chapter xx  : Setting up Learning Environment
+	Chapter xx  : Docker Machine
+	Chapter xx  : Getting started with Docker Containers
+	Chapter xx  : Container Operations
+	Chapter xx  : Working with Images
+	Chapter xx  : Dockerfile Primer
+	Chapter xx  : Linking Containers
+	Chapter xx  : Docker Compose
+	Chapter xx  : Networking with Docker
+	Chapter xx  : Managing Data with Containers
+	Chapter xx  : Log Management
+	Chapter xx  : Orchestration and  Clustering
+  Chapter xx  : Calling Docker APIs
+  Chapter xx  :
+	Chapter xx  :
+	Chapter xx  :
+	Chapter xx  :
+
+UCP, Tutum/Docker Cloud
+
+
+
+Chapters for Further Consideration for Future Books
+Adanced Docker
+
+
+Chapter xx  : kubernetes
+Chapter xx  : mesosphere, dcos
+Chapter xx  : openshift
+Chapter xx  :
+Chapter xx  :
+Chapter xx  :
+Chapter xx  :
+Chapter xx  :
+Chapter xx  :
+Chapter xx  :
+Chapter xx  :
+Chapter xx  :

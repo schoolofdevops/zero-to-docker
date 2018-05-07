@@ -1,0 +1,18 @@
+site_name: Zero to Docker
+pages:
+  - Home: "index.md"
+  - Labs:
+     - Getting Started with Docker: "chapter4-getting_started.md"
+     - Container Operations : "chapter5-container_operations.md"
+     - Dockerizing your Apps : "chapter6-dockerizing-your-apps.md"
+     - Connecting apps with Docker Compose : "chapter7-linking_containers.md"
+     - Docker Single Host Networking: "chapterx-docker-networking.md"
+     - Docker Data Persistence : "persistent-volumes.md"
+     - Docker SWARM Quick Dive : "swarm-quickdive.md"
+  - Advanced Topics:
+     - SWARM Networking Deep Dive: "swarm-networking-deepdive.md"
+     - Docker Security: "docker-security.md"
+docs_dir: manuscript
+theme: readthedocs
+plugins:
+    - search

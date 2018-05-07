@@ -1,0 +1,11 @@
+---
+slug: dockero-tutorial
+filename: dockero-tutorial
+title: Title of the Book
+subtitle: Change me
+description: Change me.
+author: Author Name
+copyright: 2016
+uuid: 7d29ecf3-9dba-4092-b859-8e7cb5bb00dc
+pdf_preview_page_range: 1..30
+epub_mobi_preview_chapter_range: 0..1

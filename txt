@@ -1,0 +1,37 @@
+        "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "95bf89762d9b0cf891e10c4391fc7f14d5cff5bbd194dff20d740d9aab5eb96b",
+                "Source": "/var/lib/docker/volumes/95bf89762d9b0cf891e10c4391fc7f14d5cff5bbd194dff20d740d9aab5eb96b/_data",
+                "Destination": "/var/lib/mysql",
+                "Driver": "local",
+                "Mode": "",
+                "RW": true,
+                "Propagation": ""
+            }
+
+
+        "Mounts": [
+            {
+                "Type": "volume",
+                "Name": "db-data",
+                "Source": "/var/lib/docker/volumes/db-data/_data",
+                "Destination": "/var/lib/mysql",
+                "Driver": "local",
+                "Mode": "z",
+                "RW": true,
+                "Propagation": ""
+            }
+
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/root/sysfoo",
+                "Destination": "/var/lib/mysql",
+                "Mode": "",
+                "RW": true,
+                "Propagation": "rprivate"
+            }
+        ],
+        "Config": {
+

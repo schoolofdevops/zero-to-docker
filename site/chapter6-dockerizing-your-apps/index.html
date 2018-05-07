@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Dockerizing your Apps - Zero to Docker</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Dockerizing your Apps";
+    var mkdocs_page_input_path = "chapter6-dockerizing-your-apps.md";
+    var mkdocs_page_url = "/chapter6-dockerizing-your-apps/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Zero to Docker</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Labs</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../chapter4-getting_started/">Getting Started with Docker</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter5-container_operations/">Container Operations</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Dockerizing your Apps</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#dockerizing-your-applications-building-images-and-working-with-registries">Dockerizing your Applications : Building Images and Working with Registries</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#lab-registering-with-the-dockerhub">Lab: Registering with the DockerHub</a></li>
+        
+            <li><a class="toctree-l4" href="#lab-building-docker-images-a-manual-approach">Lab: Building Docker Images - A manual approach</a></li>
+        
+            <li><a class="toctree-l4" href="#lab-building-images-with-dockerfile">Lab: Building Images with Dockerfile</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter7-linking_containers/">Connecting apps with Docker Compose</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapterx-docker-networking/">Docker Single Host Networking</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../persistent-volumes/">Docker Data Persistence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../swarm-quickdive/">Docker SWARM Quick Dive</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Advanced Topics</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../swarm-networking-deepdive/">SWARM Networking Deep Dive</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../docker-security/">Docker Security</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Zero to Docker</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Labs &raquo;</li>
+        
+      
+    
+    <li>Dockerizing your Apps</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="dockerizing-your-applications-building-images-and-working-with-registries">Dockerizing your Applications : Building Images and Working with Registries</h1>
+<p>In the previous session, we have learnt about various container operations such as running containers from
+pre built images, port mapping, inspecting and updating containers, limiting resources etc., In this
+chapter, we are going to learn about how to build containers for your individual applications, as well
+as how to work with docker hub registry to host and distribute the images.</p>
+<h3 id="lab-registering-with-the-dockerhub">Lab: Registering with the DockerHub</h3>
+<p>Since we are going to start working with the registry, build and push images to it later, its essential to have our own account on the registry. For the purpose of this tutorial, we are going to use the hosted registry i.e. Dockerhub.</p>
+<p>Steps to create Dockerhub account</p>
+<h4 id="step-1">Step 1:</h4>
+<p>Visit the following link and sign up with your email id<br />
+<strong>https://hub.docker.com/</strong></p>
+<p><img alt="hub" src="../images/chp6/hub1.png" /></p>
+<h4 id="step-2">Step 2:</h4>
+<p>Check your email inbox and check the activation email sent by docker team</p>
+<h4 id="step-3">Step 3:</h4>
+<p>After clicking on the activation link, you will be redirected to a log in page. Enter your credentials and log in</p>
+<p><img alt="hub" src="../images/chp6/hub2.png" /></p>
+<p>You will be launched to Dockerhub main page. Now the registration process is complete and you have account in Dockerhub!</p>
+<p><img alt="hub" src="../images/chp6/hub3.png" /></p>
+<h2 id="lab-building-docker-images-a-manual-approach">Lab: Building Docker Images - A manual approach</h2>
+<p>Before we start building automated images, we are going to create a docker image by hand. We have already used the pre built image from the registry in the last session. In this session, however, we are going to create our own image with ghost installed. Since Ghost is a node.js based application, we will base our work on existing official image for <strong>node</strong></p>
+<h4 id="clone-repository-for-java-worker-app">Clone Repository for Java worker app</h4>
+<pre><code>git clone https://github.com/schoolofdevops/voting-app-worker.git
+</code></pre>
+
+<h4 id="launch-a-intermediate-container-to-install-worker-app">Launch a intermediate container to install worker app</h4>
+<p>Create a Container with  <strong>schoolofdevops/voteapp-mvn:v1</strong> image</p>
+<pre><code>docker run -idt --name interim schoolofdevops/voteapp-mvn  sh
+
+</code></pre>
+
+<h4 id="copy-over-the-source-code">Copy over the Source Code</h4>
+<pre><code>cd voting-app-worker
+docker container cp .  interim:/code
+
+</code></pre>
+
+<p>Connect to container to compile and package the code</p>
+<pre><code>docker exec -it interim sh
+
+mvn package
+
+</code></pre>
+
+<h4 id="verify-jarfile-has-been-built">Verify jarfile has been built</h4>
+<pre><code>ls target/
+
+java -jar target/worker-jar-with-dependencies.jar
+</code></pre>
+
+<p>[output]</p>
+<pre><code>Waiting for redis
+Waiting for redis
+Waiting for redis
+Waiting for redis
+^C
+</code></pre>
+
+<p>[use ^c to exit]</p>
+<p>The above is the expected output. The <strong>worker</strong> app keeps waiting for <strong>redis</strong> and then later <strong>db</strong> in a loop.</p>
+<p>Lets now move this app to somewhere else and delete the source code</p>
+<pre><code>Waiting for redis
+Waiting for redis
+Waiting for redis
+Waiting for redis
+^C
+</code></pre>
+
+<p>Commit  container to an image</p>
+<ul>
+<li>Exit from the container shell</li>
+<li>Note container ID</li>
+</ul>
+<pre><code>
+mv target/worker-jar-with-dependencies.jar /run/worker.jar
+
+rm -rf /code/*
+</code></pre>
+
+<p>Test before pushing  by launching container with the packaged app</p>
+<pre><code>  docker run --rm -it  &lt;docker hub user id &gt;/worker:v1 java -jar /run/worker.jar
+</code></pre>
+
+<h5 id="push-image-to-registry">Push Image to registry</h5>
+<p>Before you push the image, you need to be logged in to the registry, with the docker hub id created earlier. Login using the following command,</p>
+<pre><code>docker login
+</code></pre>
+
+<p>To push the image, first list it,</p>
+<pre><code>docker image ls
+</code></pre>
+
+<p>[Sample Output]</p>
+<pre><code>REPOSITORY                   TAG                 IMAGE ID            CREATED             SIZE
+initcron/worker         v2              90cbeb6539df        18 minutes ago      194MB
+initcron/worker         v1              c0199f782489        34 minutes ago      189MB
+
+</code></pre>
+
+<p>To push the image,</p>
+<pre><code>docker push &lt;dockrhub user id&gt;/worker:v1
+</code></pre>
+
+<h2 id="lab-building-images-with-dockerfile">Lab: Building Images with Dockerfile</h2>
+<p>Now, lets build the same image, this time with Dockerfile. To do this, create a file by name <strong>Dockerfile</strong> in the root of the source code.</p>
+<p>file: Dockerfile</p>
+<pre><code>FROM schoolofdevops/maven
+
+WORKDIR /app
+
+COPY .  .
+
+RUN mvn package &amp;&amp; \
+    mv target/worker-jar-with-dependencies.jar /run/worker.jar &amp;&amp; \
+    rm -rf /app/*
+
+CMD java  -jar /run/worker.jar
+
+</code></pre>
+
+<p>Lets now build the image</p>
+<pre><code>docker image build -t &lt;dockrhub user id&gt;/worker:v2 .
+
+docker image ls
+
+</code></pre>
+
+<p>Try building again,</p>
+<pre><code>docker image build -t &lt;dockrhub user id&gt;/worker:v2 .
+
+</code></pre>
+
+<p>This time, it does not build everything, but uses cache.</p>
+<p>Testing the image</p>
+<pre><code>docker container run --rm -it  &lt;dockrhub user id&gt;/worker:v2
+
+</code></pre>
+
+<p>Tag the image as latest,</p>
+<pre><code>docker image tag  &lt;dockrhub user id&gt;/worker:v2  &lt;dockrhub user id&gt;/worker:latest
+
+docker image ls
+
+</code></pre>
+
+<p>Finally, publish it to the registry,</p>
+<pre><code>docker image push &lt;dockrhub user id&gt;/worker:latest
+
+docker image push &lt;dockrhub user id&gt;/worker
+
+</code></pre>
+
+<h3 id="references">References</h3>
+<p>Building Base Images: https://docs.docker.com/develop/develop-images/baseimages/</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../chapter7-linking_containers/" class="btn btn-neutral float-right" title="Connecting apps with Docker Compose">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../chapter5-container_operations/" class="btn btn-neutral" title="Container Operations"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../chapter5-container_operations/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../chapter7-linking_containers/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>
