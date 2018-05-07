@@ -1,0 +1,34 @@
+áŸ(0d4a87377476b1fa6c9e2b65ef8c237bc29ecb9aŸŸ<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello</span>
+  <span class="nb">puts</span> <span class="s2">&quot;hello, world&quot;</span>
+<span class="k">end</span>
+</pre></div>Ÿ(839d7cf9f30b353dc2ac2d5512f22575c52368c8Ÿ⁄<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello</span>
+  <span class="nb">puts</span> <span class="s2">&quot;hello, world!&quot;</span>
+<span class="k">end</span>
+</pre></div>Ÿ(21b592885c34ce54fc683378df353958b2e2b898Ÿ⁄<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hello</span>
+  <span class="nb">puts</span> <span class="s2">&quot;hello, world!&quot;</span>
+<span class="k">end</span>
+</pre></div>Ÿ(f9c203ee0574612d33059ba5eea4c74350b3af7a⁄—<div class="highlight"><pre><span></span><span class="gp">$</span> softcover <span class="nb">help</span>
+<span class="go">Commands:</span>
+<span class="go">  softcover build, build:all           # Build all formats</span>
+<span class="go">  softcover build:epub                 # Build EPUB</span>
+<span class="go">  softcover build:html                 # Build HTML</span>
+<span class="go">  softcover build:mobi                 # Build MOBI</span>
+<span class="go">  softcover build:pdf                  # Build PDF</span>
+<span class="go">  softcover build:preview              # Build book preview in all formats</span>
+<span class="go">  .</span>
+<span class="go">  .</span>
+<span class="go">  .</span>
+</pre></div>Ÿ(5029d45a771e261b2d9eebde2af63f89cb863a83⁄ê<div class="highlight"><pre><span></span><span class="gp">$</span> softcover <span class="nb">help</span> build
+<span class="go">Usage:</span>
+<span class="go">  softcover build, build:all</span>
+
+<span class="go">Options:</span>
+<span class="go">  -q, [--quiet]   # Quiet output</span>
+<span class="go">  -s, [--silent]  # Silent output</span>
+
+<span class="go">Build all formats</span>
+</pre></div>Ÿ(659eec71284117734af6f11dd77bb6ef49ec85eaŸv<div class="highlight"><pre><span></span># Yet *another* chapter
+
+*This chapter left intentionally blank*
+</pre></div>Ÿ(6694a484911f8e042fd41c1de207780ef31dc7ddŸÊ<div class="highlight"><pre><span></span><span class="gp">$</span> find . <span class="se">\(</span> -name <span class="se">\*</span>.gemspec -or -name <span class="se">\*</span>.jpg <span class="se">\)</span> -type f
+</pre></div>

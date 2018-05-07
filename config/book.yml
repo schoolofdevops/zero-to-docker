@@ -1,0 +1,11 @@
+---
+slug: zero-to-docker
+filename: zero-to-docker
+title: Title of the Book
+subtitle: Change me
+description: Change me.
+author: Author Name
+copyright: 2018
+uuid: 3153cd79-f8c0-4339-9f5a-d66763b2b51a
+pdf_preview_page_range: 1..30
+epub_mobi_preview_chapter_range: 0..1

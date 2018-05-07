@@ -1,0 +1,91 @@
+/* Styles specific to EPUB books */
+
+body {
+  font-size: 80%;
+  line-height: 1.2;
+  width: auto;
+  margin-left: 0.5em;
+}
+
+#title_page .title {
+  font-size: 200%;
+}
+
+#title_page .author {
+  font-size: 120%;
+}
+
+#title_page .date {
+  font-size: 120%;
+}
+
+#table_of_contents ul li {
+  padding-left: 2em;
+}
+
+.highlight pre {
+  font-size: 80%;
+  font-weight: bold;
+}
+
+code {
+  font-size: 95%;
+}
+
+.code {
+  font-size: 90%;
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.aside {
+  width: auto;
+}
+
+/* Needed to prevent red links in Kindle for iPad */
+a span.undefined_ref {
+  color: #002f72;
+}
+
+/* Hanging indentation */
+p {
+  margin: 0;
+  padding: 0;
+  text-indent: 0.95em;
+}
+
+p.noindent {
+  text-indent: 0;
+}
+
+.inline_math {
+  text-indent: 0;
+}
+.center p {
+  text-indent: 0;
+}
+
+/* Needed for properly formatted blockquotes in Kindle for iPad */
+p.quote {
+  margin-left:  1em;
+  margin-right: 1em;
+  text-indent: 0;
+  margin-top:    0em;
+  margin-bottom: 0.5em;
+}
+
+.footnotes p {
+  text-indent: 0;
+  margin-top:    0em;
+  margin-bottom: 0.5em;
+}
+
+li p {
+  text-indent: 0;
+  margin-top:    0em;
+  margin-bottom: 0.5em;
+}
+
+.aside {
+  margin: 15px 0;
+}

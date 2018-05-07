@@ -1,0 +1,10 @@
+<div id="cid6" data-tralics-id="cid6" class="chapter" data-number="2" data-chapter="another_chapter"><h1><a href="another_chapter_fragment.html#cid6" class="heading hyperref"><span class="number">Chapter 2 </span>Another chapter</a></h1>
+<p class="noindent">This is another chapter.<sup id="cha-2_footnote-ref-1" class="footnote"><a href="#cha-2_footnote-1">1</a></sup><span class="intersentencespace"></span> It also includes a little code fencing, mainly to test an edge case for the sake of the Softcover test suite:<sup id="cha-2_footnote-ref-2" class="footnote"><a href="#cha-2_footnote-2">2</a></sup></p>
+<div class="code"><div class="highlight"><pre><span></span><span class="gp">$</span> find . <span class="se">\(</span> -name <span class="se">\*</span>.gemspec -or -name <span class="se">\*</span>.jpg <span class="se">\)</span> -type f
+</pre></div></div>
+</div><div id="cha-2_footnotes">
+  <ol class="footnotes">
+    <li id="cha-2_footnote-1">Footnotes are numbered on a per-chapter basis. <a class="arrow" href="#cha-2_footnote-ref-1">↑</a></li>
+    <li id="cha-2_footnote-2">The test suite uses the template files to stress-test the build system.<span class="intersentencespace"></span> In this case, there used to be a bug when math syntax appeared in a non-math context.<span class="intersentencespace"></span> Including the code fencing as above ensures that any regressions will cause the test suite to fail. <a class="arrow" href="#cha-2_footnote-ref-2">↑</a></li>
+  </ol>
+</div>
