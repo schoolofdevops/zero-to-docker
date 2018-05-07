@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>SWARM Networking Deep Dive - Zero to Docker</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "SWARM Networking Deep Dive";
+    var mkdocs_page_input_path = "swarm-networking-deepdive.md";
+    var mkdocs_page_url = "/swarm-networking-deepdive/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Zero to Docker</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Labs</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../chapter4-getting_started/">Getting Started with Docker</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter5-container_operations/">Container Operations</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter6-dockerizing-your-apps/">Dockerizing your Apps</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter7-linking_containers/">Connecting apps with Docker Compose</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapterx-docker-networking/">Docker Single Host Networking</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../persistent-volumes/">Docker Data Persistence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../swarm-quickdive/">Docker SWARM Quick Dive</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Advanced Topics</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">SWARM Networking Deep Dive</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#swarm-networking-deep-dive">SWARM Networking Deep Dive</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#installing-pre-reqs">Installing pre reqs</a></li>
+        
+            <li><a class="toctree-l4" href="#examine-the-networks-before-setting-up-swarm">Examine the networks before setting up Swarm</a></li>
+        
+            <li><a class="toctree-l4" href="#examine-the-network-configurations-created-by-swarm">Examine the network configurations created by SWARM</a></li>
+        
+            <li><a class="toctree-l4" href="#creating-overlay-networks">Creating overlay networks</a></li>
+        
+            <li><a class="toctree-l4" href="#port-publishing-routing-mesh-ingress-network-and-external-service-discovery">Port Publishing, Routing Mesh, Ingress Network and External Service Discovery</a></li>
+        
+            <li><a class="toctree-l4" href="#service-networking-and-routing-mesh">Service Networking and Routing Mesh</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../docker-security/">Docker Security</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Zero to Docker</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Advanced Topics &raquo;</li>
+        
+      
+    
+    <li>SWARM Networking Deep Dive</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="swarm-networking-deep-dive">SWARM Networking Deep Dive</h1>
+<p>In this module, we are going to set on a interesting journey of how SWARM netwoking functions under the hood. We will delving deeper in the world of bridges, vxlans, overlays, underlays, kernel ipvs and follow the journey of a packet in a swarm cluster. We will also be looking into how docker leverages iptables and ipvs, both kernel features, to implement the service discovery and load balancing. </p>
+<h2 id="installing-pre-reqs">Installing pre reqs</h2>
+<p>Install bridge utils</p>
+<pre><code>apt-get install bridge-utils
+</code></pre>
+
+<h2 id="examine-the-networks-before-setting-up-swarm">Examine the networks before setting up Swarm</h2>
+<pre><code>brctl show
+
+</code></pre>
+
+<pre><code>bridge name bridge id       STP enabled interfaces
+
+docker0     8000.024268987cd3   no
+</code></pre>
+
+<pre><code>docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+896388d51d18        bridge              bridge              local
+3e3e8fec9527        host                host                local
+385a6e374d9d        none                null                local
+</code></pre>
+
+<h2 id="examine-the-network-configurations-created-by-swarm">Examine the network configurations created by SWARM</h2>
+<p>List the networks</p>
+<pre><code>docker network ls
+
+NETWORK ID          NAME                DRIVER              SCOPE
+9b3cdad15a64        bridge              bridge              local
+71ad6ab6c0fb        docker_gwbridge     bridge              local
+6d42f614ce37        host                host                local
+lpq3tzoevynh        ingress             overlay             swarm
+ce30767f4305        none                null                local
+</code></pre>
+
+<p>where,</p>
+<p>docker_gwbridge : bridge network created by swarm to connect containers to host and outside world</p>
+<p>ingress: overlay network created by swarm for external service discovery, load balancing with routing mesh</p>
+<p>Examine the overlay vxlan inmplemntation</p>
+<h5 id="inspect-networks">Inspect networks</h5>
+<pre><code>docker network inspect docker_gwbridge
+</code></pre>
+
+<p>[output]</p>
+<pre><code>       &quot;Containers&quot;: {
+            &quot;ingress-sbox&quot;: {
+                &quot;Name&quot;: &quot;gateway_ingress-sbox&quot;,
+                &quot;EndpointID&quot;: &quot;b735335b753af4222fa253ba8496fe5a9bff10f8ddc698bd938d2b3e10780d54&quot;,
+                &quot;MacAddress&quot;: &quot;02:42:ac:12:00:02&quot;,
+                &quot;IPv4Address&quot;: &quot;172.18.0.2/16&quot;,
+                &quot;IPv6Address&quot;: &quot;&quot;
+            }
+        },
+</code></pre>
+
+<p>where,
+ ingress-sbox : sandbox created with network namespace and configs, purely for service discovery and load balancing</p>
+<p>EndpointID   : endpoing created (veth pair) in ingress-sbox e.g. eth0 inside this network namespace</p>
+<pre><code>docker network inspect ingress
+</code></pre>
+
+<p>[output]</p>
+<pre><code>      &quot;Containers&quot;: {
+            &quot;ingress-sbox&quot;: {
+                &quot;Name&quot;: &quot;ingress-endpoint&quot;,
+                &quot;EndpointID&quot;: &quot;a187751fda1c95b0f9c47bfe5d4104cf5195a839fef588bc7e3b02da5972ca7a&quot;,
+                &quot;MacAddress&quot;: &quot;02:42:0a:ff:00:02&quot;,
+                &quot;IPv4Address&quot;: &quot;10.255.0.2/16&quot;,
+                &quot;IPv6Address&quot;: &quot;&quot;
+            }
+        },
+        &quot;Options&quot;: {
+            &quot;com.docker.network.driver.overlay.vxlanid_list&quot;: &quot;4096&quot;
+        },
+        &quot;Labels&quot;: {},
+        &quot;Peers&quot;: [
+            {
+                &quot;Name&quot;: &quot;02dddbfc3e9a&quot;,
+                &quot;IP&quot;: &quot;159.65.167.88&quot;
+            },
+            {
+                &quot;Name&quot;: &quot;96473fed4b7c&quot;,
+                &quot;IP&quot;: &quot;159.89.42.230&quot;
+            },
+            {
+                &quot;Name&quot;: &quot;c92920c69b92&quot;,
+                &quot;IP&quot;: &quot;159.89.41.130&quot;
+            }
+        ]
+    }
+</code></pre>
+
+<p>where,</p>
+<p>ingress-sbox : sandbox created with network namespace and configs, purely for service discovery and load balancing</p>
+<p>EndpointID   : endpoing created (veth pair) in ingress-sbox</p>
+<p>Peers        : nodes participating in this overlay</p>
+<p>4096         : VXLAN ID</p>
+<h4 id="examine-the-ingress-sbox-namespace">Examine the ingress-sbox namespace</h4>
+<p>Learn about netshoot utility at https://github.com/nicolaka/netshoot</p>
+<p>Launch <strong>netshoot</strong> container, and connect to <strong>ingress-sbox</strong> using nsenter.</p>
+<pre><code>docker run -it --rm -v /var/run/docker/netns:/netns --privileged=true nicolaka/netshoot nsenter --net=/netns/ingress_sbox sh
+</code></pre>
+
+<p>From inside netshoot container,</p>
+<pre><code>ifconfig
+ip link show
+
+</code></pre>
+
+<p>[output]</p>
+<pre><code>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+9: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 02:42:0a:ff:00:02 brd ff:ff:ff:ff:ff:ff
+12: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff
+</code></pre>
+
+<p>On the host</p>
+<pre><code>ip link show
+</code></pre>
+
+<p>[output]</p>
+<pre><code>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 92:20:8a:88:b6:e8 brd ff:ff:ff:ff:ff:ff
+3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 02:42:68:98:7c:d3 brd ff:ff:ff:ff:ff:ff
+7: ov-001000-lpq3t: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 8a:17:46:93:46:94 brd ff:ff:ff:ff:ff:ff
+8: vx-001000-lpq3t: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue master ov-001000-lpq3t state UNKNOWN mode DEFAULT group default
+    link/ether 8a:17:46:93:46:94 brd ff:ff:ff:ff:ff:ff
+10: veth28c87ba: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue master ov-001000-lpq3t state UP mode DEFAULT group default
+    link/ether 8a:24:17:29:46:a7 brd ff:ff:ff:ff:ff:ff
+11: docker_gwbridge: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 02:42:a0:ca:1d:96 brd ff:ff:ff:ff:ff:ff
+13: veth0740008: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker_gwbridge state UP mode DEFAULT group default
+    link/ether aa:b8:35:c2:97:74 brd ff:ff:ff:ff:ff:ff
+19: veth97a403d: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT group default
+    link/ether 8a:80:a4:17:3b:2d brd ff:ff:ff:ff:ff:ff
+</code></pre>
+
+<p>If you compare two  outputs above,</p>
+<p>9  &lt;=====&gt; 10   : ingress network</p>
+<p>12 &lt;=====&gt; 13   : docker_gwbridge network</p>
+<p>These are then further bridged. Examine the bridges in the next part.</p>
+<h5 id="interfaces-and-bridges">Interfaces and bridges</h5>
+<pre><code>ifconfig
+brctl show
+</code></pre>
+
+<p>[output]</p>
+<pre><code>brctl show
+bridge name bridge id       STP enabled interfaces
+docker0     8000.02425dcabce4   no      veth3850215
+docker_gwbridge     8000.0242105642b6   no      veth4dae0de
+ov-001000-wo0i1     8000.1e8f6f3278a0   no      vethc978c4b
+                            vx-001000-wo0i1
+</code></pre>
+
+<p>Note down the vx-001000-wo0i1 id.  To check more information use the following command.   </p>
+<p>[ Replace the command with your VXLAN ID ]</p>
+<pre><code>ip -d link show vx-001000-wo0i1
+</code></pre>
+
+<p>Show forwarding table</p>
+<pre><code>bridge fdb show dev vx-001000-wo0i1
+</code></pre>
+
+<p>[output]</p>
+<pre><code>5e:20:18:b1:1d:0e vlan 0 permanent
+02:42:0a:ff:00:03 dst 159.89.39.105 self permanent
+02:42:0a:ff:00:04 dst 165.227.64.215 self permanent
+</code></pre>
+
+<p>where,</p>
+<p>5e:20:18:b1:1d:0e =&gt;  mac of the current host<br />
+02:42:2c:32:94:4e =&gt;   mac id of ingress_box endpoint for ingress network on host with ip 159.89.39.105
+02:42:b2:0d:24:f8 =&gt;  mac id of ingress_box endpoint for ingress network on host with ip 165.227.64.215</p>
+<h4 id="examine-the-traffic">Examine the traffic</h4>
+<p>Traffic on 2377/tcp : Cluster management communication</p>
+<pre><code>tcpdump -v -i eth0 port 2377
+</code></pre>
+
+<p>Inter node gossip</p>
+<pre><code>tcpdump -v -i eth0 port 7946
+</code></pre>
+
+<p>Data plan traffic on overlay</p>
+<pre><code>tcpdump -v -i eth0 udp and port 4789
+</code></pre>
+
+<h2 id="creating-overlay-networks">Creating overlay networks</h2>
+<pre><code>docker network create -d overlay mynet0
+docker network ls
+docker network inspect mynet0
+
+</code></pre>
+
+<p>Examine the options, its missing <em>encrypted</em> flag</p>
+<pre><code>     &quot;ConfigOnly&quot;: false,
+        &quot;Containers&quot;: null,
+        &quot;Options&quot;: {
+            &quot;com.docker.network.driver.overlay.vxlanid_list&quot;: &quot;4097&quot;
+        },
+        &quot;Labels&quot;: null
+</code></pre>
+
+<p>where,
+  4097 :   vnid of this VXLAN</p>
+<pre><code>docker network create --opt encrypted -d overlay vote
+docker network ls
+docker network inspect vote
+
+</code></pre>
+
+<p>this time, encryption is enabled</p>
+<pre><code>      &quot;Containers&quot;: null,
+        &quot;Options&quot;: {
+            &quot;com.docker.network.driver.overlay.vxlanid_list&quot;: &quot;4098&quot;,
+            &quot;encrypted&quot;: &quot;&quot;
+        },
+        &quot;Labels&quot;: null
+    }
+</code></pre>
+
+<p><strong> Try This</strong></p>
+<p>Observe the following by listing networks on all nodes,   </p>
+<pre><code>docker network ls
+</code></pre>
+
+<ul>
+<li>all manager nodes have the new overlay network</li>
+<li>worker nodes will create it on need basis, only if there is a task running on that node</li>
+</ul>
+<p>Lets learn what all is created with this overlay network,</p>
+<pre><code>ifconfig
+brctl show
+</code></pre>
+
+<h4 id="launch-service-with-overlay-network">Launch Service with overlay network</h4>
+<pre><code>docker service ls
+docker service create --name redis --network vote --replicas=2 redis:alpine
+</code></pre>
+
+<p>[output]</p>
+<pre><code>8mxs1phssydpwi23teifpqcwr
+overall progress: 2 out of 2 tasks
+1/2: running   [==================================================&gt;]
+2/2: running   [==================================================&gt;]
+verify: Service converged
+</code></pre>
+
+<p>Check network on all nodes. It would be created only on selective nodes where tasks are scheduled</p>
+<pre><code>docker network ls
+docker network inspect vote
+</code></pre>
+
+<p>docker ps</p>
+<pre><code>4ea9c75179c3        redis:alpine        &quot;docker-entrypoint.s…&quot;   About a minute ago   Up About a minute   6379/tcp            redis.2.pbyb0o2e60gm1ozwc3wz9f7ou
+</code></pre>
+
+<p>Correlate interfaces and trace it</p>
+<p>Inside the container</p>
+<pre><code>docker exec 4ea9c75179c3 ip link
+
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+16: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1424 qdisc noqueue state UP
+    link/ether 02:42:0a:00:00:07 brd ff:ff:ff:ff:ff:ff
+18: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP
+    link/ether 02:42:ac:12:00:03 brd ff:ff:ff:ff:ff:ff
+</code></pre>
+
+<p>and on the host</p>
+<pre><code>root@swarm-01:/var/run# ip link
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 9e:28:4c:8a:bf:5d brd ff:ff:ff:ff:ff:ff
+3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default
+    link/ether 02:42:5d:ca:bc:e4 brd ff:ff:ff:ff:ff:ff
+7: ov-001000-wo0i1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 1e:8f:6f:32:78:a0 brd ff:ff:ff:ff:ff:ff
+8: vx-001000-wo0i1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue master ov-001000-wo0i1 state UNKNOWN mode DEFAULT group default
+    link/ether 5e:20:18:b1:1d:0e brd ff:ff:ff:ff:ff:ff
+10: vethc978c4b: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue master ov-001000-wo0i1 state UP mode DEFAULT group default
+    link/ether 1e:8f:6f:32:78:a0 brd ff:ff:ff:ff:ff:ff
+11: docker_gwbridge: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 02:42:10:56:42:b6 brd ff:ff:ff:ff:ff:ff
+13: veth4dae0de: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker_gwbridge state UP mode DEFAULT group default
+    link/ether 26:ea:d2:47:25:0d brd ff:ff:ff:ff:ff:ff
+14: ov-001001-7672d: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1424 qdisc noqueue state UP mode DEFAULT group default
+    link/ether 42:a3:4b:f3:ca:05 brd ff:ff:ff:ff:ff:ff
+15: vx-001001-7672d: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1424 qdisc noqueue master ov-001001-7672d state UNKNOWN mode DEFAULT group default
+    link/ether 42:a3:4b:f3:ca:05 brd ff:ff:ff:ff:ff:ff
+17: veth4dd295a: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1424 qdisc noqueue master ov-001001-7672d state UP mode DEFAULT group default
+    link/ether ba:83:a3:3c:73:b1 brd ff:ff:ff:ff:ff:ff
+19: veth78165ba: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker_gwbridge state UP mode DEFAULT group default
+    link/ether 76:9a:35:13:b3:64 brd ff:ff:ff:ff:ff:ff
+</code></pre>
+
+<p><strong>veth Pairs</strong></p>
+<p>16: eth0  &lt;===&gt;  17: veth4dd295a (Overlay ov-001001-7672d)</p>
+<p>18: eth1  &lt;===&gt;  19: veth78165ba (docker_gwbridge)</p>
+<p>Show forwarding table for this overlay vtep</p>
+<pre><code>brctl show
+bridge fdb show dev vx-001001-7672d
+</code></pre>
+
+<p>[output]</p>
+<pre><code>42:a3:4b:f3:ca:05 vlan 0 permanent
+02:42:0a:00:00:06 dst 159.89.39.105 self permanent
+</code></pre>
+
+<p>Where, 02:42:0a:00:00:06 should be the mac id of the container on the other hosts</p>
+<p>e.g. on swarm-2</p>
+<pre><code>root@swarm-02:~# docker exec 92ee739ecdca ip lin
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+16: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1424 qdisc noqueue state UP
+    link/ether 02:42:0a:00:00:06 brd ff:ff:ff:ff:ff:ff
+
+
+root@swarm-02:~# ip link
+17: veth353ea84: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1424 qdisc noqueue master ov-001001-7672d state UP mode DEFAULT group default
+    link/ether 6e:2a:bb:f1:52:2a brd ff:ff:ff:ff:ff:ff
+
+</code></pre>
+
+<p>Task: Do the same from the other end. Check the fdb for vxlan interface on swarm-02 and correlate it with the mac id of a container running on swarm-01</p>
+<h3 id="launch-worker-service-in-same-overlay">Launch worker service in same overlay</h3>
+<pre><code>docker service create --name worker --network vote schoolofdevops/worker
+</code></pre>
+
+<p>Should get launched on the third node  as the default scheduling algorithm is to sread the load evenly.</p>
+<p>Now on node1 and node2 check the fdb again, should see a new vtep endpoint</p>
+<p>e.g.</p>
+<p>[replace vx-001001-7672d with the id of the vxlan interface created for this overlayn/w, get it by using brctl show ]</p>
+<pre><code>
+bridge fdb show dev vx-001001-7672d
+22:ba:86:43:71:27 vlan 0 permanent
+02:42:0a:00:00:07 dst 159.65.161.208 self permanent
+02:42:0a:00:00:09 dst 165.227.64.215 self permanent
+</code></pre>
+
+<h4 id="scale-redis-service">Scale redis service</h4>
+<pre><code>docker service scale redis=5
+</code></pre>
+
+<p>Examine the fdb again</p>
+<pre><code>bridge fdb show dev vx-001001-7672d
+42:a3:4b:f3:ca:05 vlan 0 permanent
+02:42:0a:00:00:09 vlan 0
+02:42:0a:00:00:06 dst 159.89.39.105 self permanent
+02:42:0a:00:00:09 dst 165.227.64.215 self permanent
+02:42:0a:00:00:0a dst 165.227.64.215 self permanent
+02:42:0a:00:00:0b dst 159.89.39.105 self permanent
+</code></pre>
+
+<p>where,</p>
+<p>the table shows entries for every other</p>
+<h5 id="underlying-vxlan-service-and-traffic">Underlying VXLAN service  and traffic</h5>
+<p>port 4789 is reservered for vxlan. Packets will have headers with this.</p>
+<pre><code>netstat -pan | grep  4789
+
+</code></pre>
+
+<p>To see the packets going through the vxlan interface</p>
+<pre><code>brctl show
+tcpdump -i ov-001001-7672d
+</code></pre>
+
+<h3 id="internal-load-balancing">Internal Load Balancing</h3>
+<p>connect to one of the redis instances on one of the nodes</p>
+<pre><code>docker ps
+
+docker run --rm -it --net container:0b0309771045 --privileged nicolaka/netshoot
+
+</code></pre>
+
+<p>Verify redirect to ipvs</p>
+<pre><code>iptables -nvL -t nat
+</code></pre>
+
+<pre><code>
+Chain POSTROUTING (policy ACCEPT 85 packets, 5426 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   59  3712 DOCKER_POSTROUTING  all  --  *      *       0.0.0.0/0            127.0.0.11
+    3   180 SNAT       all  --  *      *       0.0.0.0/0            10.0.0.0/24          ipvs to:10.0.0.11
+
+
+</code></pre>
+
+<p>where,</p>
+<p>ipvs to:10.0.0.11 . : is routing the traffic to ipvs, running on the  same container</p>
+<p>check the mangle markers</p>
+<pre><code>iptables -nvL -t mangle
+</code></pre>
+
+<pre><code>Chain OUTPUT (policy ACCEPT 864 packets, 62611 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 MARK       all  --  *      *       0.0.0.0/0            10.0.0.5             MARK set 0x100
+  168 14112 MARK       all  --  *      *       0.0.0.0/0            10.0.0.8             MARK set 0x101
+   26  1757 MARK       all  --  *      *       0.0.0.0/0            10.0.0.13            MARK set 0x103
+
+</code></pre>
+
+<p>where,
+10.0.0.5 is s VIP for service <em>xyz</em> . 0x100is a HEX for 256.</p>
+<p>to check where this is redirecting, look at the ipvs rules</p>
+<pre><code># ipvsadm
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+FWM  256 rr
+  -&gt; redis.1.m911y2nt3wy0qo5x8i9p Masq    1      0          0
+  -&gt; redis.2.pbyb0o2e60gm1ozwc3wz Masq    1      0          0
+  -&gt; e89fbe75fb1a.vote:0          Masq    1      0          0
+  -&gt; 0b0309771045:0               Masq    1      0          0
+  -&gt; redis.5.oag34plamnmptoby9b0y Masq    1      0          0
+FWM  257 rr
+  -&gt; worker.1.lhxvgjgn5k6soaksifz Masq    1      0          0
+FWM  259 rr
+  -&gt; vote.1.hhv9l10vb5yocxmkbzzdv Masq    1      0          0
+  -&gt; vote.2.h1iwvk5t8hr9pc6mpqsxk Masq    1      0          0
+</code></pre>
+
+<p>here the following is doing a RR load balancing across 5 nodes</p>
+<pre><code>FWM  256 rr
+  -&gt; redis.1.m911y2nt3wy0qo5x8i9p Masq    1      0          0
+  -&gt; redis.2.pbyb0o2e60gm1ozwc3wz Masq    1      0          0
+  -&gt; e89fbe75fb1a.vote:0          Masq    1      0          0
+  -&gt; 0b0309771045:0               Masq    1      0          0
+  -&gt; redis.5.oag34plamnmptoby9b0y Masq    1      0          0
+</code></pre>
+
+<h2 id="port-publishing-routing-mesh-ingress-network-and-external-service-discovery">Port Publishing, Routing Mesh, Ingress Network and External Service Discovery</h2>
+<pre><code>docker network ls
+docker network inspect ingress
+</code></pre>
+
+<p>where,</p>
+<p>Peers : shows all the hosts which are part of this ingress (note the peers and corraborate)
+ Containers : shows ingress-sbox namespace (its not a containers, just a namespace, has one interface in gwbridge, another ingress)</p>
+<p>Creat a container which is part of this ingress</p>
+<pre><code>docker service create --name vote --network vote --publish 80 --replicas=2 schoolofdevops/vote
+</code></pre>
+
+<p>docker ps</p>
+<p>[output]</p>
+<pre><code>CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS               NAMES
+85642d7fa2f4        schoolofdevops/vote:latest   &quot;gunicorn app:app -b�&quot;   28 seconds ago      Up 27 seconds       80/tcp              vote.1.hhv9l10vb5yocxmkbzzdvtmj2
+64f05b29e559        redis:alpine                 &quot;docker-entrypoint.s�&quot;   29 minutes ago      Up 29 minutes       6379/tcp            redis.5.oag34plamnmptoby9b0yuaooi
+4ea9c75179c3        redis:alpine                 &quot;docker-entrypoint.s�&quot;   About an hour ago   Up About an hour    6379/tcp            redis.2.pbyb0o2e60gm1ozwc3wz9f7ou
+</code></pre>
+
+<p>Connect to container and examine</p>
+<pre><code>docker exec 85642d7fa2f4 ifconfig
+
+docker exec 85642d7fa2f4 ip link show
+
+docker exec 85642d7fa2f4 netstat -nr
+
+</code></pre>
+
+<p>Correlate it with the host veth pair</p>
+<pre><code>ip link show
+brctl show
+docker network ls
+</code></pre>
+
+<p>eth0 =&gt; ingress
+eth1 =&gt; gwbridge</p>
+<p>eth2 =&gt; overlay for apps</p>
+<h2 id="service-networking-and-routing-mesh">Service Networking and Routing Mesh</h2>
+<p>For external facing ingress connnetiion, service routing works this way,</p>
+<p>ingress ==&gt; gwbridge ==&gt; ingress-sbox (its just a n/w namespae not a container) ==&gt; ipvs ==&gt; underlay</p>
+<ul>
+<li>Check iptable rules on the host</li>
+</ul>
+<pre><code>iptables -nvL -t nat
+</code></pre>
+
+<p>[output]</p>
+<pre><code>...
+Chain DOCKER-INGRESS (2 references)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 DNAT       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:30000 to:172.18.0.2:30000
+   31  1744 RETURN     all  --  *      *       0.0.0.0/0            0.0.0.0/0
+</code></pre>
+
+<p>where,</p>
+<p>tcp dpt:30000 to:172.18.0.2:30000 =&gt; is forwarding  the traffic received on 30000 port to 172.18.0.2:30000. Here 172.18.0.2 belongs to <strong>ingress_sbox</strong> so whatever happens next is inside there...</p>
+<ul>
+<li>Connecting to ingress-sbox</li>
+</ul>
+<pre><code>docker run -it --rm -v /var/run/docker/netns:/var/run/docker/netns --privileged=true nicolaka/netshoot
+
+nsenter --net=/var/run/docker/netns/ingress_sbox sh
+
+</code></pre>
+
+<p>alternately</p>
+<pre><code>docker run -it --rm -v /var/run/docker/netns:/netns --privileged=true nicolaka/netshoot nsenter --net=/netns/ingress_sbox sh
+
+</code></pre>
+
+<p>and then</p>
+<pre><code>iptables -nvL -t mangle
+</code></pre>
+
+<pre><code>Chain PREROUTING (policy ACCEPT 16 packets, 1888 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 MARK       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:30000 MARK set 0x102
+
+</code></pre>
+
+<p>where,</p>
+<p>iptables is setting MARK to 0x102 for anything that comes in on 30000 port. 0x102 is hex value and can be translated into integer from here https://www.binaryhexconverter.com/hex-to-decimal-converter</p>
+<p>e.g.  0x102 = 258</p>
+<ul>
+<li>Now check the rules for above mark with ipvs</li>
+</ul>
+<pre><code>ipvsadm
+
+</code></pre>
+
+<p>[output]</p>
+<pre><code>IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -&gt; RemoteAddress:Port           Forward Weight ActiveConn InActConn
+FWM  258 rr
+  -&gt; 10.255.0.6:0                 Masq    1      0          0
+  -&gt; 10.255.0.7:0                 Masq    1      0          0
+</code></pre>
+
+<p>This is where the decision is made as to where this packet goes. Since ipvs uses round robin algorithm, one of these ips are selected and then packet is sent over the <strong>ingress</strong> overlay network.</p>
+<p>Finally,</p>
+<p>To see the traffic on ingress network</p>
+<p>on node2</p>
+<pre><code>
+tcpdump -i eth0 udp and port 4789
+tcpdump -i eth0 esp
+
+</code></pre>
+
+<hr />
+<h3 id="additional-commands">Additional Commands</h3>
+<pre><code>tail -f syslog
+tcpdump -i eth0 udp and port 4789
+tcpdump -i eth0 esp
+ip addr
+ip link
+iptables -t nat -nvL
+
+</code></pre>
+
+<ul>
+<li>To see namespaces on the docker host</li>
+</ul>
+<p>cd /var/run
+ln -s /var/run/docker/netns netns
+ip netns</p>
+<p>docker network ls
+[company network and ns ids]</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../docker-security/" class="btn btn-neutral float-right" title="Docker Security">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../swarm-quickdive/" class="btn btn-neutral" title="Docker SWARM Quick Dive"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../swarm-quickdive/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../docker-security/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>
