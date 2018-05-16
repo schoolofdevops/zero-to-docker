@@ -15,6 +15,13 @@ docker container  run -idt  --name vote -P  schoolofdevops/vote
 
 Try registering a vote with the voteapp UI.  Does it work?
 
+You could also try if **vote** is able to discover **redis** by running
+
+```
+docker exec vote ping redis
+
+```
+
 
 ### Linking services
 

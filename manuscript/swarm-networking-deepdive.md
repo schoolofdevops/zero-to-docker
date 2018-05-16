@@ -1,6 +1,6 @@
 # SWARM Networking Deep Dive
 
-In this module, we are going to set on a interesting journey of how SWARM netwoking functions under the hood. We will delving deeper in the world of bridges, vxlans, overlays, underlays, kernel ipvs and follow the journey of a packet in a swarm cluster. We will also be looking into how docker leverages iptables and ipvs, both kernel features, to implement the service discovery and load balancing. 
+In this module, we are going to set on a interesting journey of how SWARM netwoking functions under the hood. We will delving deeper in the world of bridges, vxlans, overlays, underlays, kernel ipvs and follow the journey of a packet in a swarm cluster. We will also be looking into how docker leverages iptables and ipvs, both kernel features, to implement the service discovery and load balancing.
 
 ## Installing pre reqs
 
@@ -133,69 +133,8 @@ where,
 
  4096	      : VXLAN ID
 
+We will look inside the ingress-sbox namespaces as later part of this tutorial.
 
-#### Examine the ingress-sbox namespace
-
-Learn about netshoot utility at https://github.com/nicolaka/netshoot
-
-Launch **netshoot** container, and connect to **ingress-sbox** using nsenter.
-
-```
-docker run -it --rm -v /var/run/docker/netns:/netns --privileged=true nicolaka/netshoot nsenter --net=/netns/ingress_sbox sh
-```
-
-From inside netshoot container,
-```
-ifconfig
-ip link show
-
-```
-[output]
-```
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-9: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP mode DEFAULT group default
-    link/ether 02:42:0a:ff:00:02 brd ff:ff:ff:ff:ff:ff
-12: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default
-    link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff
-```
-
-On the host
-
-```
-ip link show
-```
-[output]
-```
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
-    link/ether 92:20:8a:88:b6:e8 brd ff:ff:ff:ff:ff:ff
-3: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default
-    link/ether 02:42:68:98:7c:d3 brd ff:ff:ff:ff:ff:ff
-7: ov-001000-lpq3t: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP mode DEFAULT group default
-    link/ether 8a:17:46:93:46:94 brd ff:ff:ff:ff:ff:ff
-8: vx-001000-lpq3t: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master ov-001000-lpq3t state UNKNOWN mode DEFAULT group default
-    link/ether 8a:17:46:93:46:94 brd ff:ff:ff:ff:ff:ff
-10: veth28c87ba: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master ov-001000-lpq3t state UP mode DEFAULT group default
-    link/ether 8a:24:17:29:46:a7 brd ff:ff:ff:ff:ff:ff
-11: docker_gwbridge: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default
-    link/ether 02:42:a0:ca:1d:96 brd ff:ff:ff:ff:ff:ff
-13: veth0740008: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker_gwbridge state UP mode DEFAULT group default
-    link/ether aa:b8:35:c2:97:74 brd ff:ff:ff:ff:ff:ff
-19: veth97a403d: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT group default
-    link/ether 8a:80:a4:17:3b:2d brd ff:ff:ff:ff:ff:ff
-```
-
-If you compare two  outputs above,
-
-9  <=====> 10   : ingress network
-
-12 <=====> 13   : docker_gwbridge network
-
-
-
-These are then further bridged. Examine the bridges in the next part.
 
 ##### Interfaces and bridges
 
@@ -592,7 +531,73 @@ where,
  Containers : shows ingress-sbox namespace (its not a containers, just a namespace, has one interface in gwbridge, another ingress)
 
 
-Creat a container which is part of this ingress
+#### Examine the ingress-sbox namespace
+
+ Learn about netshoot utility at https://github.com/nicolaka/netshoot
+
+ Launch **netshoot** container, and connect to **ingress-sbox** using nsenter.
+
+ ```
+ docker run -it --rm -v /var/run/docker/netns:/netns --privileged=true nicolaka/netshoot nsenter --net=/netns/ingress_sbox sh
+ ```
+
+ From inside netshoot container,
+ ```
+ ifconfig
+ ip link show
+
+ ```
+ [output]
+ ```
+ 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+ 9: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP mode DEFAULT group default
+     link/ether 02:42:0a:ff:00:02 brd ff:ff:ff:ff:ff:ff
+ 12: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default
+     link/ether 02:42:ac:12:00:02 brd ff:ff:ff:ff:ff:ff
+ ```
+
+ On the host
+
+ ```
+ ip link show
+ ```
+ [output]
+ ```
+ 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default
+     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+ 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+     link/ether 92:20:8a:88:b6:e8 brd ff:ff:ff:ff:ff:ff
+ 3: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default
+     link/ether 02:42:68:98:7c:d3 brd ff:ff:ff:ff:ff:ff
+ 7: ov-001000-lpq3t: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP mode DEFAULT group default
+     link/ether 8a:17:46:93:46:94 brd ff:ff:ff:ff:ff:ff
+ 8: vx-001000-lpq3t: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master ov-001000-lpq3t state UNKNOWN mode DEFAULT group default
+     link/ether 8a:17:46:93:46:94 brd ff:ff:ff:ff:ff:ff
+ 10: veth28c87ba: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master ov-001000-lpq3t state UP mode DEFAULT group default
+     link/ether 8a:24:17:29:46:a7 brd ff:ff:ff:ff:ff:ff
+ 11: docker_gwbridge: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default
+     link/ether 02:42:a0:ca:1d:96 brd ff:ff:ff:ff:ff:ff
+ 13: veth0740008: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker_gwbridge state UP mode DEFAULT group default
+     link/ether aa:b8:35:c2:97:74 brd ff:ff:ff:ff:ff:ff
+ 19: veth97a403d: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT group default
+     link/ether 8a:80:a4:17:3b:2d brd ff:ff:ff:ff:ff:ff
+ ```
+
+ If you compare two  outputs above,
+
+ 9  <=====> 10   : ingress network
+
+ 12 <=====> 13   : docker_gwbridge network
+
+
+
+These are then further bridged. Examine the bridges in the next part.
+
+
+**********
+
+Create a container which is part of this ingress
 
 
 ```
@@ -748,3 +753,41 @@ ip netns
 
 docker network ls
 [company network and ns ids]
+
+
+
+
+**References**
+
+
+CNM and Libnetwork
+https://github.com/docker/libnetwork/blob/master/docs/design.md
+
+
+How VXLANs work ?
+https://youtu.be/Jqm_4TMmQz8?t=32s  (watch from 00.32 to xx.xx)
+https://www.youtube.com/watch?v=YNqKDI_bnPM
+
+Overlay Tutorial
+https://neuvector.com/network-security/docker-swarm-container-networking/
+
+Docker Networking Tutorial - Learning by Practicing
+https://www.securitynik.com/2016/12/docker-networking-internals-container.html
+
+Swarm networks
+https://docs.docker.com/v17.09/engine/swarm/networking/
+
+
+Ip cheatsheet
+https://access.redhat.com/sites/default/files/attachments/rh_ip_command_cheatsheet_1214_jcs_print.pdf
+
+
+Overlay issues
+https://github.com/moby/moby/issues/30820
+
+
+Network Troubleshooting
+https://success.docker.com/article/troubleshooting-container-networking
+
+
+Connect Service to Multiple Networks: https://www.slideshare.net/SreenivasMakam/docker-networking-common-issues-and-troubleshooting-techniques

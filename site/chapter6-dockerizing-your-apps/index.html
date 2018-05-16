@@ -113,6 +113,14 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../troubleshooting-toolkit/">Troubleshooting Toolkit</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../docker-swarm-ucp-troubleshooting/">SWARM, UCP, DTR Troubleshooting</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../docker-security/">Docker Security</a>
                 </li>
     </ul>
@@ -204,6 +212,13 @@ mvn package
 java -jar target/worker-jar-with-dependencies.jar
 </code></pre>
 
+<p>Move the artifact, remove source code</p>
+<pre><code>
+mv target/worker-jar-with-dependencies.jar /run/worker.jar
+
+rm -rf /code/*
+</code></pre>
+
 <p>[output]</p>
 <pre><code>Waiting for redis
 Waiting for redis
@@ -227,10 +242,10 @@ Waiting for redis
 <li>Exit from the container shell</li>
 <li>Note container ID</li>
 </ul>
+<p>Commit the container into a image  as,</p>
 <pre><code>
-mv target/worker-jar-with-dependencies.jar /run/worker.jar
+docker container commit interim  &lt;docker hub user id &gt;/worker:v1
 
-rm -rf /code/*
 </code></pre>
 
 <p>Test before pushing  by launching container with the packaged app</p>

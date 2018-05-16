@@ -74,6 +74,14 @@ ls target/
 java -jar target/worker-jar-with-dependencies.jar
 ```
 
+Move the artifact, remove source code
+```
+
+mv target/worker-jar-with-dependencies.jar /run/worker.jar
+
+rm -rf /code/*
+```
+
 [output]
 ```
 Waiting for redis
@@ -103,12 +111,12 @@ Commit  container to an image
   * Exit from the container shell
   * Note container ID
 
+Commit the container into a image  as,
 
 ```
 
-mv target/worker-jar-with-dependencies.jar /run/worker.jar
+docker container commit interim  <docker hub user id >/worker:v1
 
-rm -rf /code/*
 ```
 
 Test before pushing  by launching container with the packaged app
