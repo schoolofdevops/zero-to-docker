@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>SWARM, UCP, DTR Troubleshooting - Zero to Docker</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "SWARM, UCP, DTR Troubleshooting";
+    var mkdocs_page_input_path = "docker-swarm-ucp-troubleshooting.md";
+    var mkdocs_page_url = "/docker-swarm-ucp-troubleshooting/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Zero to Docker</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Labs</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../chapter4-getting_started/">Getting Started with Docker</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter5-container_operations/">Container Operations</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter6-dockerizing-your-apps/">Dockerizing your Apps</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter7-linking_containers/">Connecting apps with Docker Compose</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapterx-docker-networking/">Docker Single Host Networking</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../persistent-volumes/">Docker Data Persistence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../swarm-quickdive/">Docker SWARM Quick Dive</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Advanced Topics</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../swarm-networking-deepdive/">SWARM Networking Deep Dive</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../troubleshooting-toolkit/">Troubleshooting Toolkit</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">SWARM, UCP, DTR Troubleshooting</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#stacklayer-based-troubleshooting">Stack/Layer  Based Troubleshooting</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#ucp-troubleshooting">UCP Troubleshooting</a></li>
+        
+            <li><a class="toctree-l4" href="#dtr-troubleshooting">DTR Troubleshooting</a></li>
+        
+            <li><a class="toctree-l4" href="#swarm-troubleshooting">Swarm Troubleshooting</a></li>
+        
+            <li><a class="toctree-l4" href="#system-troubleshooting">System Troubleshooting</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../docker-security/">Docker Security</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Zero to Docker</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Advanced Topics &raquo;</li>
+        
+      
+    
+    <li>SWARM, UCP, DTR Troubleshooting</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="stacklayer-based-troubleshooting">Stack/Layer  Based Troubleshooting</h1>
+<h2 id="ucp-troubleshooting">UCP Troubleshooting</h2>
+<p>[UCP Architecture]
+(https://docs.docker.com/datacenter/ucp/2.2/guides/architecture/)</p>
+<p>[UCP Node States[(
+https://docs.docker.com/ee/ucp/admin/monitor-and-troubleshoot/troubleshoot-node-messages/#ucp-node-states)</p>
+<p><a href="https://success.docker.com/article/troubleshooting-a-ucp-22x-cluster">Troubleshooting UCP Cluster Matrix</a></p>
+<h3 id="swarm-configurations-troubleshooting">Swarm Configurations Troubleshooting</h3>
+<p>On UCP Node, check the key value cluster health</p>
+<pre><code>docker exec -it ucp-kv etcdctl \
+        --endpoint https://127.0.0.1:2379 \
+        --ca-file /etc/docker/ssl/ca.pem \
+        --cert-file /etc/docker/ssl/cert.pem \
+        --key-file /etc/docker/ssl/key.pem \
+        cluster-health
+</code></pre>
+
+<h3 id="rethink-db-status">Rethink DB Status</h3>
+<pre><code>
+NODE_ADDRESS=$(docker info --format '{{.Swarm.NodeAddr}}')
+VERSION=$(docker image ls --format '{{.Tag}}' docker/ucp-auth | head -n 1)
+docker container run --rm -v ucp-auth-store-certs:/tls docker/ucp-auth:${VERSION} --db-addr=${NODE_ADDRESS}:12383 db-status
+
+</code></pre>
+
+<h2 id="dtr-troubleshooting">DTR Troubleshooting</h2>
+<p>Health Checks</p>
+<p>https://dtr.schoolofdevops.org/_ping
+https://dtr.schoolofdevops.org/nginx_status
+https://dtr.schoolofdevops.org/api/v0/meta/cluster_status</p>
+<p>DTR Overlay and RethinkDB Troubleshooting https://docs.docker.com/ee/dtr/admin/monitor-and-troubleshoot/troubleshoot-with-logs/</p>
+<h2 id="swarm-troubleshooting">Swarm Troubleshooting</h2>
+<p>Node Level</p>
+<pre><code>docker node ls
+docker node inspect &lt;node&gt;
+docker node update --availability drain &lt;node&gt;
+docker node rm &lt;node&gt;
+</code></pre>
+
+<p>Service Level</p>
+<pre><code>docker service ls
+docker service ps &lt;service&gt;
+docker service inspect &lt;service&gt;
+docker service logs &lt;service&gt;
+</code></pre>
+
+<p>Look for <strong>CreatedAt</strong>,  <strong>UpdatedAt</strong> to corroborate with start of the issue.</p>
+<p>Tasks/Containers</p>
+<pre><code>docker inspect &lt;container&gt;
+docker logs &lt;container&gt;
+
+</code></pre>
+
+<h3 id="finding-docker-daemon-logs">Finding Docker Daemon Logs</h3>
+<ul>
+<li>Ubuntu (old using upstart ) - /var/log/upstart/docker.log</li>
+<li>Ubuntu (new using systemd ) - sudo journalctl -fu docker.service</li>
+<li>Boot2Docker - /var/log/docker.log</li>
+<li>Debian GNU/Linux - /var/log/daemon.log</li>
+<li>CentOS - /var/log/daemon.log | grep docker</li>
+<li>CoreOS - journalctl -u docker.service</li>
+<li>Fedora - journalctl -u docker.service</li>
+<li>Red Hat Enterprise Linux Server - /var/log/messages | grep docker</li>
+<li>OpenSuSE - journalctl -u docker.service</li>
+<li>OSX - ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/log/d‌​ocker.log</li>
+<li>Windows - Get-EventLog -LogName Application -Source Docker -After (Get-Date).AddMinutes(-5) | Sort-Object Time</li>
+</ul>
+<h2 id="system-troubleshooting">System Troubleshooting</h2>
+<h3 id="file-descriptors">File Descriptors</h3>
+<pre><code>cat /proc/sys/fs/file-max
+</code></pre>
+
+<pre><code>cat /proc/sys/fs/file-nr
+</code></pre>
+
+<p>[output]</p>
+<pre><code>1632    0   202648
+</code></pre>
+
+<p>where,</p>
+<p>1632: currently allocated file descriptors
+0: free allocated file descriptors
+202648 : max file descriptors</p>
+<p>To update the limit</p>
+<pre><code>ulimit -n 99999
+sysctl -w fs.file-max=100000
+
+docker run --ulimit nofile=90000:90000 &lt;image-tag&gt;
+</code></pre>
+
+<p>To check open files</p>
+<pre><code>lsof
+
+lsof | wc -l
+
+lsof | grep &lt;pid&gt;
+</code></pre>
+
+<p><strong>References</strong></p>
+<p>Etcd and RethinkDB Troubleshooting: https://docs.docker.com/datacenter/ucp/2.2/guides/admin/monitor-and-troubleshoot/troubleshoot-configurations/#check-the-status-of-the-database</p>
+<p>Where are docker daemon logs, stackoverflow discussion https://stackoverflow.com/questions/30969435/where-is-the-docker-daemon-log?utm_medium=organic&amp;utm_source=google_rich_qa&amp;utm_campaign=google_rich_qa</p>
+<p>File Descriptors: https://www.netadmintools.com/art295.html</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../docker-security/" class="btn btn-neutral float-right" title="Docker Security">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../troubleshooting-toolkit/" class="btn btn-neutral" title="Troubleshooting Toolkit"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../troubleshooting-toolkit/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../docker-security/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>
