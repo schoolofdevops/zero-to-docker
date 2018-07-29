@@ -35,7 +35,7 @@ Before we start building automated images, we are going to create a docker image
 #### Clone Repository for Java worker app
 
 ```
-git clone https://github.com/schoolofdevops/voting-app-worker.git
+git clone https://github.com/schoolofdevops/example-voting-app.git
 ```
 
 #### Launch a intermediate container to install worker app
@@ -51,7 +51,7 @@ docker run -idt --name interim schoolofdevops/voteapp-mvn  sh
 
 
 ```
-cd voting-app-worker
+cd example-voting-app/worker
 docker container cp .  interim:/code
 
 ```
@@ -74,35 +74,30 @@ ls target/
 java -jar target/worker-jar-with-dependencies.jar
 ```
 
+[sample output]
+```
+/code # java -jar target/worker-jar-with-dependencies.jar
+Waiting for redis
+Waiting for redis
+Waiting for redis
+Waiting for redis
+Waiting for redis
+Waiting for redis
+^c
+```
+[use ^c to exit]
+
+The above is the expected output. The **worker** app keeps waiting for **redis** and then later **db** in a loop.
+
+
 Move the artifact, remove source code
 ```
 
 mv target/worker-jar-with-dependencies.jar /run/worker.jar
 
 rm -rf /code/*
-```
 
-[output]
-```
-Waiting for redis
-Waiting for redis
-Waiting for redis
-Waiting for redis
-^C
-```
-
-[use ^c to exit]
-
-The above is the expected output. The **worker** app keeps waiting for **redis** and then later **db** in a loop.
-
-Lets now move this app to somewhere else and delete the source code
-
-```
-Waiting for redis
-Waiting for redis
-Waiting for redis
-Waiting for redis
-^C
+exit
 ```
 
 
@@ -160,7 +155,7 @@ docker push <dockrhub user id>/worker:v1
 
 Now, lets build the same image, this time with Dockerfile. To do this, create a file by name **Dockerfile** in the root of the source code.
 
-file: Dockerfile
+`file: example-voting-app/worker/Dockerfile`
 
 ```
 FROM schoolofdevops/maven
@@ -181,6 +176,8 @@ CMD java  -jar /run/worker.jar
 Lets now build the image
 
 ```
+cd example-voting-app/worker
+
 docker image build -t <dockrhub user id>/worker:v2 .
 
 docker image ls
