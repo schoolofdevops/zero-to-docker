@@ -10,6 +10,7 @@ pages:
      - Docker Data Persistence : "persistent-volumes.md"
      - Docker SWARM Quick Dive : "swarm-quickdive.md"
   - Advanced Topics:
+     - Distributing Images: "distributing_images.md"
      - SWARM Networking Deep Dive: "swarm-networking-deepdive.md"
      - Troubleshooting Toolkit: "troubleshooting-toolkit.md"
      - SWARM, UCP, DTR Troubleshooting: "docker-swarm-ucp-troubleshooting.md"

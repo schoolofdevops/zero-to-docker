@@ -165,3 +165,34 @@ docker exec -it nt05 sh
 
 ifconfig
 ```
+
+
+### Observe docker bridge, routing and port mapping
+
+Exercise: Read about [**netshoot** utility here](https://github.com/nicolaka/netshoot)
+
+
+Launch netshoot and connect to the host network
+
+```
+
+docker run -it --net host --privileged  nicolaka/netshoot
+
+```
+
+Examine port mapping,
+
+```
+iptables -nvL -t nat
+```
+
+Traverse host port to container ip and port.
+
+Observe docker bridge and routing with the following command,
+
+```
+brctl show
+
+ip route show
+
+```
