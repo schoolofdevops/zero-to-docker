@@ -255,11 +255,13 @@ docker exec nt04 ifconfig eth0
 <p>nt03 :  172.18.0.2</p>
 <p>nt04 :  172.18.0.3</p>
 <p>Create a table with the ips on your host.  Once you do that,</p>
-<p>Try to,
-  * ping from <strong>nt01</strong> to <strong>nt02</strong>
-  * ping from <strong>nt01</strong> to <strong>nt03</strong>
-  * ping from <strong>nt03</strong> to <strong>nt04</strong>
-  * ping from <strong>nt03</strong> to <strong>nt02</strong></p>
+<p>Try to,</p>
+<ul>
+<li>ping from <strong>nt01</strong> to <strong>nt02</strong>  </li>
+<li>ping from <strong>nt01</strong> to <strong>nt03</strong>  </li>
+<li>ping from <strong>nt03</strong> to <strong>nt04</strong>  </li>
+<li>ping from <strong>nt03</strong> to <strong>nt02</strong>  </li>
+</ul>
 <p>e.g.</p>
 <p>[replace ip addresses as per your setup]</p>
 <pre><code>docker exec nt01  ping 172.17.0.19
