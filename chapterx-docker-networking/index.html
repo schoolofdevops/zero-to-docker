@@ -83,6 +83,8 @@
         
             <li><a class="toctree-l4" href="#host-networking">Host Networking</a></li>
         
+            <li><a class="toctree-l4" href="#observe-docker-bridge-routing-and-port-mapping">Observe docker bridge, routing and port mapping</a></li>
+        
         </ul>
     
 
@@ -282,6 +284,26 @@ ifconfig
 docker exec -it nt05 sh
 
 ifconfig
+</code></pre>
+
+<h3 id="observe-docker-bridge-routing-and-port-mapping">Observe docker bridge, routing and port mapping</h3>
+<p>Exercise: Read about <a href="https://github.com/nicolaka/netshoot"><strong>netshoot</strong> utility here</a></p>
+<p>Launch netshoot and connect to the host network</p>
+<pre><code>
+docker run -it --net host --privileged  nicolaka/netshoot
+
+</code></pre>
+
+<p>Examine port mapping,</p>
+<pre><code>iptables -nvL -t nat
+</code></pre>
+
+<p>Traverse host port to container ip and port.</p>
+<p>Observe docker bridge and routing with the following command,</p>
+<pre><code>brctl show
+
+ip route show
+
 </code></pre>
               
             </div>
