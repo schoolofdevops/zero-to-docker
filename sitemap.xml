@@ -58,6 +58,12 @@
     
         
     <url>
+     <loc>/distributing_images/</loc>
+     <lastmod>2018-07-31</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>/swarm-networking-deepdive/</loc>
      <lastmod>2018-07-31</lastmod>
      <changefreq>daily</changefreq>

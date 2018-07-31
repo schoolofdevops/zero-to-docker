@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Docker Security - Zero to Docker</title>
+  <title>Distributing Images - Zero to Docker</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Docker Security";
-    var mkdocs_page_input_path = "docker-security.md";
-    var mkdocs_page_url = "/docker-security/";
+    var mkdocs_page_name = "Distributing Images";
+    var mkdocs_page_input_path = "distributing_images.md";
+    var mkdocs_page_url = "/distributing_images/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -91,9 +91,23 @@
 		
     <span class="caption-text">Advanced Topics</span>
     <ul class="subnav">
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../distributing_images/">Distributing Images</a>
+    <a class="current" href="./">Distributing Images</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#distributing-docker-images-and-advanced-image-operations">Distributing Docker Images and Advanced Image Operations</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#offline-distribution-of-images">Offline distribution of images</a></li>
+        
+            <li><a class="toctree-l4" href="#flattening-images">Flattening Images</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -107,15 +121,9 @@
                     
     <a class="" href="../docker-swarm-ucp-troubleshooting/">SWARM, UCP, DTR Troubleshooting</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Docker Security</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#references">References:</a></li>
-    
-
-    </ul>
+    <a class="" href="../docker-security/">Docker Security</a>
                 </li>
     </ul>
 	    </li>
@@ -146,7 +154,7 @@
         
       
     
-    <li>Docker Security</li>
+    <li>Distributing Images</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -156,14 +164,64 @@
           <div role="main">
             <div class="section">
               
-                <h4 id="references">References:</h4>
-<p>Docker Security Labs : https://github.com/docker/labs/tree/master/security</p>
-<p>Docker Bench Security Scan : https://github.com/docker/docker-bench-security</p>
-<p>Content Trust : https://github.com/docker/labs/blob/master/security/trust/README.md</p>
-<p>User Namespaces : https://github.com/docker/labs/blob/master/security/userns/README.md</p>
-<p>Seccomp:  https://docs.docker.com/engine/security/seccomp/#significant-syscalls-blocked-by-the-default-profile</p>
-<p>Secrets:
-https://github.com/docker/labs/blob/master/security/secrets/README.md</p>
+                <h1 id="distributing-docker-images-and-advanced-image-operations">Distributing Docker Images and Advanced Image Operations</h1>
+<ul>
+<li>
+<p>Using public registry (Docker Hub)</p>
+<ul>
+<li>Public Repos</li>
+<li>Private Repos</li>
+<li>Automated Builds</li>
+</ul>
+</li>
+<li>
+<p>Using Private Registry</p>
+<ul>
+<li>VMWare Harbor</li>
+</ul>
+</li>
+<li>
+<p>Offline Distribution</p>
+<ul>
+<li>docker image save</li>
+<li>docker image load  </li>
+</ul>
+</li>
+<li>
+<p>Flatten Images</p>
+<ul>
+<li>docker container export</li>
+<li>docker image import</li>
+</ul>
+</li>
+</ul>
+<p>By now, you would  have already  learnt how to use  Docker Hub as a public registry to distribute images, with public repositories. In addition to the public repos, you could also create private repo on Docker Hub and share access with specific group of people.</p>
+<h3 id="offline-distribution-of-images">Offline distribution of images</h3>
+<pre><code>docker image pull schoolofdevops/vote
+
+docker image save schoolofdevops/vote -o schoolofdevops_vote.tar
+
+docker image rm schoolofdevops/vote
+
+docker image ls
+
+docker image load -i schoolofdevops_vote.tar
+
+</code></pre>
+
+<h3 id="flattening-images">Flattening Images</h3>
+<pre><code>docker image history schoolofdevops/vote
+
+docker container run -idt -P --name vote schoolofdevops/vote
+
+docker container  export vote -o schoolofdevops_vote_exported.tar
+
+docker image import schoolofdevops_vote_exported.tar schoolofdevops/vote:imported
+
+docker image history schoolofdevops/vote:imported
+
+
+</code></pre>
               
             </div>
           </div>
@@ -171,8 +229,10 @@ https://github.com/docker/labs/blob/master/security/secrets/README.md</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../swarm-networking-deepdive/" class="btn btn-neutral float-right" title="SWARM Networking Deep Dive">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../docker-swarm-ucp-troubleshooting/" class="btn btn-neutral" title="SWARM, UCP, DTR Troubleshooting"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href="../swarm-quickdive/" class="btn btn-neutral" title="Docker SWARM Quick Dive"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -198,8 +258,10 @@ https://github.com/docker/labs/blob/master/security/secrets/README.md</p>
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../docker-swarm-ucp-troubleshooting/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../swarm-quickdive/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../swarm-networking-deepdive/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
