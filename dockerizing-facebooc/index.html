@@ -73,10 +73,15 @@
     <a class="current" href="./">Project - Dockerizing Facebooc</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</a></li>
+    <li class="toctree-l3"><a href="#project-build-a-docker-image-for-facebooc-app">Project : Build a docker image for Facebooc app</a></li>
     
-
-    <li class="toctree-l3"><a href="#approach-2-building-image-with-dockerfile">Approach 2: Building image with Dockerfile</a></li>
+        <ul>
+        
+            <li><a class="toctree-l4" href="#approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</a></li>
+        
+            <li><a class="toctree-l4" href="#approach-2-building-image-with-dockerfile">Approach 2: Building image with Dockerfile</a></li>
+        
+        </ul>
     
 
     </ul>
@@ -163,7 +168,9 @@
           <div role="main">
             <div class="section">
               
-                <h3 id="approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</h3>
+                <h2 id="project-build-a-docker-image-for-facebooc-app">Project : Build a docker image for Facebooc app</h2>
+<p>Facebooc (https://github.com/schoolofdevops/facebooc) is a app written in C. Its a simple, web based social media application clone and used SQLite as a database backend. As a devops engineer, you have been tasked with building an image for facebooc app and publish it to docker hub registry. </p>
+<h3 id="approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</h3>
 <p>on the host </p>
 <pre><code>git clone https://github.com/schoolofdevops/facebooc.git
 docker container run -idt --name fb -p 16000:16000 ubuntu bash
