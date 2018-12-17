@@ -118,10 +118,11 @@ nt04 :  172.18.0.3
 Create a table with the ips on your host.  Once you do that,
 
 Try to,
-  * ping from **nt01** to **nt02**
-  * ping from **nt01** to **nt03**
-  * ping from **nt03** to **nt04**
-  * ping from **nt03** to **nt02**
+
+  * ping from **nt01** to **nt02**  
+  * ping from **nt01** to **nt03**  
+  * ping from **nt03** to **nt04**  
+  * ping from **nt03** to **nt02**  
 
 
 e.g.
