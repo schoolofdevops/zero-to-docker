@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Docker SWARM Quick Dive - Zero to Docker</title>
+  <title>Project - Dockerizing Facebooc - Zero to Docker</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Docker SWARM Quick Dive";
-    var mkdocs_page_input_path = "swarm-quickdive.md";
-    var mkdocs_page_url = "/swarm-quickdive/";
+    var mkdocs_page_name = "Project - Dockerizing Facebooc";
+    var mkdocs_page_input_path = "dockerizing-facebooc.md";
+    var mkdocs_page_url = "/dockerizing-facebooc/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -68,9 +68,18 @@
                     
     <a class="" href="../chapter6-dockerizing-your-apps/">Dockerizing your Apps</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../dockerizing-facebooc/">Project - Dockerizing Facebooc</a>
+    <a class="current" href="./">Project - Dockerizing Facebooc</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</a></li>
+    
+
+    <li class="toctree-l3"><a href="#approach-2-building-image-with-dockerfile">Approach 2: Building image with Dockerfile</a></li>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -84,25 +93,9 @@
                     
     <a class="" href="../persistent-volumes/">Docker Data Persistence</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Docker SWARM Quick Dive</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#lab-docker-swarm-quick-dive">Lab: Docker SWARM Quick Dive</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#launch-a-visualizer-on-master-swarm-manager">Launch a Visualizer on Master (SWARM Manager)</a></li>
-        
-            <li><a class="toctree-l4" href="#deploying-service-with-swarm-the-imperative-way">Deploying Service with swarm - The imperative way</a></li>
-        
-            <li><a class="toctree-l4" href="#orchestrating-applications-with-stack-deploy">Orchestrating Applications with Stack Deploy</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../swarm-quickdive/">Docker SWARM Quick Dive</a>
                 </li>
     </ul>
 	    </li>
@@ -160,7 +153,7 @@
         
       
     
-    <li>Docker SWARM Quick Dive</li>
+    <li>Project - Dockerizing Facebooc</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -170,142 +163,80 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="lab-docker-swarm-quick-dive">Lab: Docker SWARM Quick Dive</h1>
-<p>Create a 5 nodes (3 masters, 2nodes) swarm cluster using http://play-with-docker.com</p>
-<h3 id="launch-a-visualizer-on-master-swarm-manager">Launch a Visualizer on Master (SWARM Manager)</h3>
-<pre><code>docker run -itd -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock schoolofdevops/visualizer
+                <h3 id="approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</h3>
+<p>on the host </p>
+<pre><code>git clone https://github.com/schoolofdevops/facebooc.git
+docker container run -idt --name fb -p 16000:16000 ubuntu bash
+docker cp facebooc fb:/opt
+docker exec -it fb bash
+</code></pre>
+
+<p>inside the container </p>
+<pre><code>cd /opt/facebooc/
+apt-get update
+apt-get install -yq build-essential make libsqlite3-dev sqlite3
+make all
+bin/facebooc
+</code></pre>
+
+<p>on the host </p>
+<pre><code>docker diff fb 
+
+docker container commit fb &lt;docker_id&gt;/facebooc:v1
+
+docker login 
+
+docker image push &lt;docker_id&gt;/facebooc:v1
 
 </code></pre>
 
-<h2 id="deploying-service-with-swarm-the-imperative-way">Deploying Service with swarm - The imperative way</h2>
-<pre><code class="sh">docker service create --name vote schoolofdevops/vote
-</code></pre>
+<h3 id="approach-2-building-image-with-dockerfile">Approach 2: Building image with Dockerfile</h3>
+<p>Change into facebooc directory which containts the source code.  This assumes you have already cloned the repo. If not, clone it from https://github.com/schoolofdevops/facebooc</p>
+<pre><code>cd facebooc 
+ls
 
-<pre><code class="sh">docker service ls
-docker service inspect
-
-</code></pre>
-
-<pre><code>docker service  update --publish-add 80:80 vote
-</code></pre>
-
-<p>Try accessing port 80 on any of the nodes in the swarm cluster to validate.</p>
-<h4 id="scaling-a-service">Scaling a service</h4>
-<pre><code>docker service scale vote=4
-docker service  ls
-docker service scale vote=2
-</code></pre>
-
-<h4 id="cleaning-up">Cleaning Up</h4>
-<pre><code>docker service rm vote
-</code></pre>
-
-<h2 id="orchestrating-applications-with-stack-deploy">Orchestrating Applications with Stack Deploy</h2>
-<p>file: stack.yml</p>
-<pre><code>version: &quot;3&quot;
-
-networks:
-  nw01:
-    driver: overlay
-
-volumes:
-  db-data:
-
-services:
-  vote:
-    image: schoolofdevops/vote:v1
-    ports:
-      - 80
-    networks:
-      - nw01
-    depends_on:
-      - redis
-    deploy:
-      replicas: 8
-      update_config:
-        parallelism: 2
-        delay: 20s
-      restart_policy:
-        condition: on-failure  
-
-  redis:
-    image: redis:alpine
-    networks:
-      - nw01
-
-  worker:
-    image: schoolofdevops/vote-worker
-    networks:
-      - nw01
-    depends_on:
-      - redis
-      - db
-
-  db:
-    image: postgres:9.4
-    networks:
-      - nw01
-    volumes:
-      - db-data:/var/lib/postgresql/data
-
-  result:
-    image: schoolofdevops/vote-result
-    ports:
-      - 5001:80
-    networks:
-      - nw01
-    depends_on:
-      - db
+LICENSE  Makefile  README.md  include  src  static  templates
 
 </code></pre>
 
-<p>You could also copy the above file using the followinng command,</p>
-<pre><code>wget -chttps://gist.githubusercontent.com/initcron/8a5ebd534df74ab2a83e96218b56137d/raw/9e748637aed121b67ceddeca8678750596c81ab7/stack.yml
+<p>Add/create  Dockerfile the the same directory (facebooc) witht the following content, </p>
+<pre><code>FROM  ubuntu
+
+
+WORKDIR /opt/facebooc
+
+RUN  apt-get update &amp;&amp;  \
+     apt-get install -yq build-essential make git libsqlite3-dev sqlite3 
+
+
+COPY . /opt/facebooc
+
+RUN  make all 
+
+EXPOSE 16000
+
+CMD &quot;bin/facebooc&quot;
 </code></pre>
 
-<p>Deploy a stack</p>
-<pre><code>docker stack deploy --compose-file stack.yml instavote
-
+<p>Build image using, </p>
+<pre><code> docker build -t &lt;docker_id&gt;/facebooc:v2 .
 </code></pre>
 
-<p>Validate</p>
-<pre><code>docker stack ls
-
-docker stack services instavote
-
-docker service ls
-
-docker service scale instavote_vote=4
+<p>where, 
+  <docker_id> : your docker registry user/namespace. Replace this with the actual user</p>
+<p>validate </p>
+<pre><code>docker image ls
+docker image history &lt;docker_id&gt;/facebooc:v2
+docker container run -idt -P &lt;docker_id&gt;/facebooc:v2
+docker ps 
 </code></pre>
 
-<h3 id="deploying-a-new-version">Deploying a new version</h3>
-<p>Update stack.yml with the new version of the image</p>
-<pre><code>....
-services:
-  vote:
-    image: schoolofdevops/vote:v2
-  .....
-
-    deploy:
-      replicas: 8
-      update_config:
-        parallelism: 2
-        delay: 20s
-      restart_policy:
-        condition: on-failure  
-...
+<p>Check by connecting to your host:port to validate if facebooc web application shows up. </p>
+<p>Once validated, tag and push </p>
+<pre><code>docker image tag &lt;docker_id&gt;/facebooc:v2 &lt;docker_id&gt;/facebooc:latest
+docker login
+docker push &lt;docker_id&gt;/facebooc
 </code></pre>
-
-<p>Deploy  using  the same command as earlier,</p>
-<pre><code>docker stack deploy --compose-file stack.yml instavote
-</code></pre>
-
-<h3 id="fault-tolerance">Fault Tolerance</h3>
-<ul>
-<li>Delete a node</li>
-<li>Observe the node being removed from cluster</li>
-<li>Observe tasks getting rescheduled automatically on available nodes</li>
-</ul>
               
             </div>
           </div>
@@ -313,10 +244,10 @@ services:
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../distributing_images/" class="btn btn-neutral float-right" title="Distributing Images">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../chapter7-linking_containers/" class="btn btn-neutral float-right" title="Connecting apps with Docker Compose">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../persistent-volumes/" class="btn btn-neutral" title="Docker Data Persistence"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../chapter6-dockerizing-your-apps/" class="btn btn-neutral" title="Dockerizing your Apps"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -342,10 +273,10 @@ services:
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../persistent-volumes/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../chapter6-dockerizing-your-apps/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../distributing_images/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../chapter7-linking_containers/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
