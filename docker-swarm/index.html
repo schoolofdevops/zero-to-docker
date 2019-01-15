@@ -7,16 +7,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
-  <link rel="shortcut icon" href="./img/favicon.ico">
-  <title>Zero to Docker</title>
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Docker Swarm - Quick Dive - Zero to Docker</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
   
-  <script src="./js/jquery-2.1.1.min.js" defer></script>
-  <script src="./js/modernizr-2.8.3.min.js" defer></script>
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Docker Swarm - Quick Dive";
+    var mkdocs_page_input_path = "docker-swarm.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
@@ -29,9 +36,9 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href="./." class="icon icon-home"> Zero to Docker</a>
+        <a href=".." class="icon icon-home"> Zero to Docker</a>
         <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
@@ -43,7 +50,7 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="./.">Home</a>
+    <a class="" href="..">Home</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -52,39 +59,39 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="./chapter4-getting_started/">Getting Started with Docker</a>
+    <a class="" href="../chapter4-getting_started/">Getting Started with Docker</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./chapter5-container_operations/">Container Operations</a>
+    <a class="" href="../chapter5-container_operations/">Container Operations</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./chapter6-dockerizing-your-apps/">Dockerizing your Apps</a>
+    <a class="" href="../chapter6-dockerizing-your-apps/">Dockerizing your Apps</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./dockerizing-voteapp/">Project - Dockerizing Voteapp</a>
+    <a class="" href="../dockerizing-voteapp/">Project - Dockerizing Voteapp</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./dockerizing-facebooc/">Project - Dockerizing Facebooc</a>
+    <a class="" href="../dockerizing-facebooc/">Project - Dockerizing Facebooc</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./chapter7-linking_containers/">Connecting apps with Docker Compose</a>
+    <a class="" href="../chapter7-linking_containers/">Connecting apps with Docker Compose</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./chapterx-docker-networking/">Docker Single Host Networking</a>
+    <a class="" href="../chapterx-docker-networking/">Docker Single Host Networking</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./persistent-volumes/">Docker Data Persistence</a>
+    <a class="" href="../persistent-volumes/">Docker Data Persistence</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./swarm-quickdive/">Docker SWARM Quick Dive</a>
+    <a class="" href="../swarm-quickdive/">Docker SWARM Quick Dive</a>
                 </li>
     </ul>
 	    </li>
@@ -95,23 +102,23 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="./distributing_images/">Distributing Images</a>
+    <a class="" href="../distributing_images/">Distributing Images</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./swarm-networking-deepdive/">SWARM Networking Deep Dive</a>
+    <a class="" href="../swarm-networking-deepdive/">SWARM Networking Deep Dive</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./troubleshooting-toolkit/">Troubleshooting Toolkit</a>
+    <a class="" href="../troubleshooting-toolkit/">Troubleshooting Toolkit</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./docker-swarm-ucp-troubleshooting/">SWARM, UCP, DTR Troubleshooting</a>
+    <a class="" href="../docker-swarm-ucp-troubleshooting/">SWARM, UCP, DTR Troubleshooting</a>
                 </li>
                 <li class="">
                     
-    <a class="" href="./docker-security/">Docker Security</a>
+    <a class="" href="../docker-security/">Docker Security</a>
                 </li>
     </ul>
 	    </li>
@@ -126,7 +133,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="./.">Zero to Docker</a>
+        <a href="..">Zero to Docker</a>
       </nav>
 
       
@@ -134,9 +141,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="./.">Docs</a> &raquo;</li>
+    <li><a href="..">Docs</a> &raquo;</li>
     
+      
     
+    <li>Docker Swarm - Quick Dive</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -146,19 +155,45 @@
           <div role="main">
             <div class="section">
               
+                <h1 id="docker-swarm-quick-dive">Docker Swarm - Quick Dive</h1>
+<h3 id="with-swarm-mode-docker-version-112">With Swarm Mode ( Docker version 1.12)</h3>
+<pre><code>docker-machine create -d virtualbox master
+docker-machine create -d virtualbox node1
+docker-machine create -d virtualbox node2
+</code></pre>
 
-  <h1 id="search">Search Results</h1>
+<h3 id="in-window-1">In window 1</h3>
+<pre><code>docker-machine env master
+[execute the command to setup env ]
+docker swarm init --advertise-addr &lt;IP_ADDRESS_OF_MASTER&gt;
+docker node ls
+</code></pre>
 
-  <form id="content_search" action="search.html">
-    <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-    <input name="q" id="mkdocs-search-query" type="text" class="search_input search-query ui-autocomplete-input" placeholder="Search the Docs" autocomplete="off" autofocus title="Type search term here">
-  </form>
+<h3 id="in-window-2">In window 2</h3>
+<pre><code>docker-machine env node1
+docker swarm join \
+    --token &lt;TOKEN&gt; \
+    &lt;IP_ADDRESS_OF_MASTER&gt;
+</code></pre>
 
-  <div id="mkdocs-search-results" class="search-results">
-    Searching...
-  </div>
+<h3 id="in-window-3">In window 3</h3>
+<pre><code>docker-machine env node1
+docker swarm join \
+    --token &lt;TOKEN&gt; \
+    &lt;IP_ADDRESS_OF_MASTER&gt;
+</code></pre>
 
-
+<h3 id="in-window-1_1">In window 1</h3>
+<pre><code>docker node ls
+docker service create --replicas 1 --name helloworld alpine ping docker.com
+docker service ls
+docker service inspect --pretty helloworld
+docker service scale helloworld=5
+docker service ps helloworld
+docker node ps node1
+docker service rm helloworld
+</code></pre>
+              
             </div>
           </div>
           <footer>
@@ -188,9 +223,9 @@
       
     </span>
 </div>
-    <script>var base_url = '.';</script>
-    <script src="./js/theme.js" defer></script>
-      <script src="./search/main.js" defer></script>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
 
 </body>
 </html>

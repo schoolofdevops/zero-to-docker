@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Connecting apps with Docker Compose - Zero to Docker</title>
+  <title>Project - Dockerizing Voteapp - Zero to Docker</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Connecting apps with Docker Compose";
-    var mkdocs_page_input_path = "chapter7-linking_containers.md";
+    var mkdocs_page_name = "Project - Dockerizing Voteapp";
+    var mkdocs_page_input_path = "dockerizing-voteapp.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -69,29 +69,31 @@
                     
     <a class="" href="../chapter6-dockerizing-your-apps/">Dockerizing your Apps</a>
                 </li>
-                <li class="">
-                    
-    <a class="" href="../dockerizing-voteapp/">Project - Dockerizing Voteapp</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../dockerizing-facebooc/">Project - Dockerizing Facebooc</a>
-                </li>
                 <li class=" current">
                     
-    <a class="current" href="./">Connecting apps with Docker Compose</a>
+    <a class="current" href="./">Project - Dockerizing Voteapp</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#building-application-stacks-defining-and-running-multi-container-apps">Building Application Stacks - Defining and Running Multi Container Apps</a></li>
+    <li class="toctree-l3"><a href="#project-build-a-docker-image-for-instavote-frontend-vote-app">Project : Build a docker image for Instavote frontend vote app</a></li>
     
         <ul>
         
-            <li><a class="toctree-l4" href="#lab-creating-a-docker-compose-stack-for-the-vote-application">Lab: Creating a Docker Compose Stack for the Vote Application</a></li>
+            <li><a class="toctree-l4" href="#approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</a></li>
+        
+            <li><a class="toctree-l4" href="#approach-2-building-image-with-dockerfile">Approach 2: Building image with Dockerfile</a></li>
         
         </ul>
     
 
     </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../dockerizing-facebooc/">Project - Dockerizing Facebooc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter7-linking_containers/">Connecting apps with Docker Compose</a>
                 </li>
                 <li class="">
                     
@@ -161,7 +163,7 @@
         
       
     
-    <li>Connecting apps with Docker Compose</li>
+    <li>Project - Dockerizing Voteapp</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -171,110 +173,84 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="building-application-stacks-defining-and-running-multi-container-apps">Building Application Stacks - Defining and Running Multi Container Apps</h1>
-<h2 id="lab-creating-a-docker-compose-stack-for-the-vote-application">Lab: Creating a Docker Compose Stack for the Vote Application</h2>
-<p>Lets first launch redis and vote independently  and see if they automatically connect.</p>
-<pre><code>docker container run -idt --name redis redis:alpine
+                <h2 id="project-build-a-docker-image-for-instavote-frontend-vote-app">Project : Build a docker image for Instavote frontend vote app</h2>
+<p><a href="https://github.com/schoolofdevops/vote">Voteapp Frontend</a> is a app written in python. Its a simple, web based vote application frontend. As a devops engineer, you have been tasked with building an image for vote app and publish it to docker hub registry.</p>
+<h3 id="approach-1-building-docker-image-for-facebooc-app-manually">Approach 1: Building docker image for facebooc app manually</h3>
+<p>on the host</p>
+<pre><code>git clone https://github.com/schoolofdevops/vote
+docker container run -idt --name vote -p 8000:80 python:2.7-alpine sh
+cd vote
+docker cp . vote:/app
+docker exec -it vote sh
+</code></pre>
 
-docker container  run -idt  --name vote -P  schoolofdevops/vote
+<p>inside the container</p>
+<pre><code>cd /app
+pip install -r requirements.txt
+gunicorn app:app -b 0.0.0.0:80
+</code></pre>
+
+<p>Validate by accessing http://IPADDRESS:8000</p>
+<p>on the host</p>
+<pre><code>docker diff fb
+
+docker container commit vote &lt;docker_id&gt;/vote:v1
+
+docker login
+
+docker image push &lt;docker_id&gt;/vote:v1
 
 </code></pre>
 
-<p>Try registering a vote with the voteapp UI.  Does it work?</p>
-<p>You could also try if <strong>vote</strong> is able to discover <strong>redis</strong> by running</p>
-<pre><code>docker exec vote ping redis
+<h3 id="approach-2-building-image-with-dockerfile">Approach 2: Building image with Dockerfile</h3>
+<p>Change into facebooc directory which containts the source code.  This assumes you have already cloned the repo. If not, clone it from https://github.com/schoolofdevops/facebooc</p>
+<pre><code>cd vote
+ls
 
+app.py  requirements.txt  static  templates
 </code></pre>
 
-<h3 id="linking-services">Linking services</h3>
-<p>Remove vote container created above if any, and re launch it with the link.</p>
-<pre><code>docker container rm -f vote
+<p>Add/create  Dockerfile the the same directory (vote) with the following content,</p>
+<pre><code># Using official python runtime base image
+FROM python:2.7-alpine
 
-docker container  run -idt  --name vote --link redis:redis -P  schoolofdevops/vote
+# Set the application directory
+WORKDIR /app
+
+# Install our requirements.txt
+ADD requirements.txt /app/requirements.txt
+RUN pip install -r requirements.txt
+
+# Copy our code from the current folder to /app inside the container
+ADD . /app
+
+# Make port 80 available for links and/or publish
+EXPOSE 80
+
+# Define our command to be run when launching the container
+CMD  gunicorn app:app -b 0.0.0.0:80 --log-file - --access-logfile - --workers 4 --keep-alive 0
 </code></pre>
 
-<p>Launch worker app as well with the link</p>
-<pre><code>
-docker container  run -idt  --name worker --link redis:redis -P  schoolofdevops/vote-worker
-
-
-docker logs worker
+<p>Build image using,</p>
+<pre><code> docker build -t &lt;docker_id&gt;/vote:v2 .
 </code></pre>
 
-<h3 id="launching-inter-linked-services-with-compose-spec">Launching inter linked services with Compose spec</h3>
-<p>Lets now create a docker-compose spec and launch the services with docker-compose utility.</p>
-<p>Create a directory to keep the compose files. Lets say <strong>stack</strong></p>
-<pre><code>mkdir stack
-cd stack
+<p>where,
+  <docker_id> : your docker registry user/namespace. Replace this with the actual user</p>
+<p>validate</p>
+<pre><code>docker image ls
+docker image history &lt;docker_id&gt;/vote:v2
+docker image history &lt;docker_id&gt;/vote:v1
+
+docker container run -idt -P &lt;docker_id&gt;/vote:v2
+docker ps
 </code></pre>
 
-<p>file: docker-compose.yml</p>
-<pre><code>vote:
-  image: schoolofdevops/vote
-  links:
-    - redis:redis
-  ports:
-    - 80   
-
-redis:
-  image: redis:alpine
-
-worker:
-  image: schoolofdevops/vote-worker
-  links:
-    - redis:redis
-
-</code></pre>
-
-<p>Syntax check</p>
-<pre><code>docker-compose config
-</code></pre>
-
-<p>Now launch it with</p>
-<pre><code>docker-compose up -d
-
-docker-compose ps
-
-</code></pre>
-
-<p>file: docker-compose-v3.yml</p>
-<pre><code>version: &quot;3&quot;
-
-networks:
-  vote:
-    driver: bridge
-
-services:
-  vote:
-    image: schoolofdevops/vote
-    ports:
-      - 80
-    networks:
-      - vote
-    depends_on:
-      - redis
-
-  redis:
-    image: redis:alpine
-    networks:
-      - vote
-
-  worker:
-    image: schoolofdevops/vote-worker
-    networks:
-      - vote
-    depends_on:
-      - redis
-</code></pre>
-
-<p>Launch the new stack with,</p>
-<pre><code>docker-compose -f docker-compose-v3.yml up -d
-
-
-docker-compose -f docker-compose-v3.yml ps
-
-
-docker-compose -f docker-compose-v3.yml down
+<p>Check by connecting to your host:port to validate if vote web application shows up.</p>
+<p>Once validated, tag and push</p>
+<pre><code>docker image tag &lt;docker_id&gt;/vote:v2 &lt;docker_id&gt;/vote:latest
+docker login
+docker push &lt;docker_id&gt;/vote
 </code></pre>
               
             </div>
@@ -283,10 +259,10 @@ docker-compose -f docker-compose-v3.yml down
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../chapterx-docker-networking/" class="btn btn-neutral float-right" title="Docker Single Host Networking">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../dockerizing-facebooc/" class="btn btn-neutral float-right" title="Project - Dockerizing Facebooc">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../dockerizing-facebooc/" class="btn btn-neutral" title="Project - Dockerizing Facebooc"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../chapter6-dockerizing-your-apps/" class="btn btn-neutral" title="Dockerizing your Apps"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -312,10 +288,10 @@ docker-compose -f docker-compose-v3.yml down
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../dockerizing-facebooc/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../chapter6-dockerizing-your-apps/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../chapterx-docker-networking/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../dockerizing-facebooc/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

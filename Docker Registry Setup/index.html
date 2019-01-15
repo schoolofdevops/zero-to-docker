@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Docker Registry - Zero to Docker</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Docker Registry";
+    var mkdocs_page_input_path = "Docker Registry Setup.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Zero to Docker</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Labs</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../chapter4-getting_started/">Getting Started with Docker</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter5-container_operations/">Container Operations</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter6-dockerizing-your-apps/">Dockerizing your Apps</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../dockerizing-voteapp/">Project - Dockerizing Voteapp</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../dockerizing-facebooc/">Project - Dockerizing Facebooc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapter7-linking_containers/">Connecting apps with Docker Compose</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../chapterx-docker-networking/">Docker Single Host Networking</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../persistent-volumes/">Docker Data Persistence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../swarm-quickdive/">Docker SWARM Quick Dive</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Advanced Topics</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../distributing_images/">Distributing Images</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../swarm-networking-deepdive/">SWARM Networking Deep Dive</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../troubleshooting-toolkit/">Troubleshooting Toolkit</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../docker-swarm-ucp-troubleshooting/">SWARM, UCP, DTR Troubleshooting</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../docker-security/">Docker Security</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Zero to Docker</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Docker Registry</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="docker-registry">Docker Registry</h1>
+<p>The Registry is a stateless, highly scalable server side application that stores and lets you distribute Docker images.</p>
+<h3 id="setting-up-the-docker-registry">Setting up the Docker Registry</h3>
+<pre><code>docker run -d -p 5000:5000 --name registry registry:2
+</code></pre>
+
+<p>This pulls the registry:2 image from the docker hub and runs the docker container. The name of the container is Registry.  </p>
+<pre><code>docker pull ubuntu &amp;&amp; docker tag ubuntu localhost:5000/myfirstimage
+</code></pre>
+
+<p>This pulls the ubuntu image from the docker hub. And we tag the image to localhost:5000/myfirstimage  </p>
+<pre><code>docker push localhost:5000/myfirstimage
+</code></pre>
+
+<p>When we try to push the image, it locally saves in the host file system. This we call as the <strong>Docker Registry</strong><br />
+To stop the Registry we use  </p>
+<pre><code>docker stop registry
+</code></pre>
+
+<p>To remove Registry with all the data  </p>
+<pre><code>docker rm -v registry
+</code></pre>
+
+<h3 id="docker-private-registry">Docker Private Registry</h3>
+<p>Docker Private Registry is to deploy the docker images present in one VM or host to another VM or Host.<br />
+Create a file system like given below in the host computer  </p>
+<pre><code>.
+├── Docker
+│   └── Vagrantfile
+└── Docker-Client
+    └── Vagrantfile
+</code></pre>
+
+<p>Both vagrant file bringing up the same Vagrant Box file.</p>
+<p>Change the ip in the both the Vagrentfile as "192.168.33.10" and "192.168.33.11"</p>
+<p>Now bring up the VM in the Docker directory.  </p>
+<pre><code>vagrant up; vagrant ssh
+</code></pre>
+
+<p>Once both the machines are up add an entry in <code>/etc/hosts</code></p>
+<pre><code>&lt;Machine IP&gt; myregistrydomain.com
+</code></pre>
+
+<p><em>Note: Replace <code>&lt;Machine IP&gt;</code> with the respective vagrant machine IP's</em></p>
+<p>We need to install Docker Compose first.  </p>
+<pre><code>yum install python-pip
+pip install docker-compose
+</code></pre>
+
+<h3 id="setting-docker-registry">Setting Docker Registry</h3>
+<p>After isntalling Docker Compose, its time to setup the .yml file for the Docker Compose.<br />
+Since we need a place to store the list of users who can access our Registry we need a place to store it. So we are going to install httpd-tools which contains the package called as <strong>htpasswd</strong>  </p>
+<pre><code>yum install httpd-tools
+mkdir ~/docker-registry &amp;&amp; cd $_
+mkdir data
+</code></pre>
+
+<p>In the docker-registry, we create the .yml file for compose.  </p>
+<pre><code>vim docker-compose.yml
+</code></pre>
+
+<p>Now add the following contents contents  </p>
+<pre><code>registry:
+  image: registry:2
+  ports:
+    - 127.0.0.1:5000:5000
+  environment:
+    REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+  volumes:
+    - ./data:/data
+</code></pre>
+
+<p>Now save the file. And run docker compose.  </p>
+<pre><code>docker-compose up -d
+</code></pre>
+
+<p>Now to stop and remove the container that have been created  </p>
+<pre><code>docker-compose stop  
+docker-compose rm
+</code></pre>
+
+<h3 id="setting-nginx-container">Setting Nginx container</h3>
+<p>Edit docker compose file so that we can add the configurations for Nginx.  </p>
+<pre><code>vim docker-compose.yml
+</code></pre>
+
+<p>Add the contents  </p>
+<pre><code>nginx:
+  image: &quot;nginx:1.9&quot;
+  ports:
+    - 5043:443
+  links:
+    - registry:registry
+  volumes:
+    - ./nginx/:/etc/nginx/conf.d:ro
+</code></pre>
+
+<p>The full docker-compose.yml looks like  </p>
+<pre><code>nginx:
+  image: &quot;nginx:1.9&quot;
+  ports:
+    - 5043:443
+  links:
+    - registry:registry
+  volumes:
+    - ./nginx/:/etc/nginx/conf.d
+registry:
+  image: registry:2
+  ports:
+    - 127.0.0.1:5000:5000
+  environment:
+    REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+  volumes:
+    - ./data:/data
+</code></pre>
+
+<p>Now we going to  edit the registry configurations for the SSL certification  </p>
+<pre><code>mkdir -p ~/docker-registry/nginx/
+vim ~/docker-registry/nginx/registry.conf
+</code></pre>
+
+<p>Add the following contents  </p>
+<pre><code>  upstream docker-registry {
+  server registry:5000;
+}
+
+server {
+  listen 443;
+  server_name myregistrydomain.com;
+
+  # SSL
+  # ssl on;
+  # ssl_certificate /etc/nginx/conf.d/domain.crt;
+  # ssl_certificate_key /etc/nginx/conf.d/domain.key;
+
+  # disable any limits to avoid HTTP 413 for large image uploads
+  client_max_body_size 0;
+
+  # required to avoid HTTP 411: see Issue #1486 (https://github.com/docker/docker/issues/1486)
+  chunked_transfer_encoding on;
+
+  location /v2/ {
+    # Do not allow connections from docker 1.5 and earlier
+    # docker pre-1.6.0 did not properly set the user agent on ping, catch &quot;Go *&quot; user agents
+    if ($http_user_agent ~ &quot;^(docker\/1\.(3|4|5(?!\.[0-9]-dev))|Go ).*$&quot; ) {
+      return 404;
+    }
+
+    # To add basic authentication to v2 use auth_basic setting plus add_header
+    # auth_basic &quot;registry.localhost&quot;;
+    # auth_basic_user_file /etc/nginx/conf.d/registry.password;
+    # add_header 'Docker-Distribution-Api-Version' 'registry/2.0' always;
+
+    proxy_pass                          http://docker-registry;
+    proxy_set_header  Host              $http_host;   # required for docker client's sake
+    proxy_set_header  X-Real-IP         $remote_addr; # pass on real client's IP
+    proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header  X-Forwarded-Proto $scheme;
+    proxy_read_timeout                  900;
+  }
+}
+</code></pre>
+
+<p>Save the file and exit<br />
+Now again start the docker compose.  </p>
+<pre><code>docker-compose up -d
+</code></pre>
+
+<p>To check whether Docker Registry is working or not try the following command  </p>
+<pre><code>curl http://localhost:5000/v2/
+</code></pre>
+
+<p>The output will be <strong>{}</strong><br />
+And also try  </p>
+<pre><code>curl http://localhost:5043/v2/
+</code></pre>
+
+<p>The output will be <strong>{}</strong><br />
+Now to stop and remove the container that have been created  </p>
+<pre><code>docker-compose stop  
+docker-compose rm
+</code></pre>
+
+<p>Next we going to create user and  their password who can login and access our Docker Registry</p>
+<p>(Replace USERNAME with your <em>username</em>)</p>
+<pre><code>cd ~/docker-registry/nginx
+htpasswd -c registry.password USERNAME
+</code></pre>
+
+<p>For the first time when we run the command we use the option -c so that it creates the file. After that we dont need to use that option when we create Username<br />
+Now in the registry.conf which we created we are going to make some changes  </p>
+<pre><code>vim ~/docker-registry/nginx/registry.conf
+</code></pre>
+
+<p>Delete the below lines and  </p>
+<pre><code># To add basic authentication to v2 use auth_basic setting plus add_header
+# auth_basic &quot;registry.localhost&quot;;
+# auth_basic_user_file /etc/nginx/conf.d/registry.password;
+# add_header 'Docker-Distribution-Api-Version' 'registry/2.0' always;
+</code></pre>
+
+<p>And add the following lines  </p>
+<pre><code># To add basic authentication to v2 use auth_basic setting plus add_header
+auth_basic &quot;registry.localhost&quot;;
+auth_basic_user_file /etc/nginx/conf.d/registry.password;
+add_header 'Docker-Distribution-Api-Version' 'registry/2.0' always;
+</code></pre>
+
+<p>Now we are going to start the Docker Compose to see the changes  that we have done in the configuration file.  </p>
+<pre><code>cd ~/docker-registry
+docker-compose up -d
+</code></pre>
+
+<p>Now check the in the command line  </p>
+<pre><code>curl http://localhost:5043/v2/
+</code></pre>
+
+<p>[Output]  </p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;&lt;title&gt;401 Authorization Required&lt;/title&gt;&lt;/head&gt;
+&lt;body bgcolor=&quot;white&quot;&gt;
+&lt;center&gt;&lt;h1&gt;401 Authorization Required&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx/1.9.7&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>This is because we we have given the registry.password file for the authentication.<br />
+Now try the below command to check  </p>
+<pre><code>curl http://USERNAME:PASSWORD@localhost:5043/v2/
+</code></pre>
+
+<p>Now to stop and remove the container that have been created  </p>
+<pre><code>docker-compose stop  
+docker-compose rm
+</code></pre>
+
+<h3 id="setitng-the-ssl-certificates">Setitng the ssl certificates</h3>
+<p>For SSL certificate go to the registry.conf files and do the following changes  </p>
+<pre><code>nano ~/docker-registry/nginx/registry.conf
+</code></pre>
+
+<p>Delete the following lines of code  </p>
+<pre><code>server {
+listen 443;
+server_name myregistrydomain.com;
+# SSL
+# ssl on;
+# ssl_certificate /etc/nginx/conf.d/domain.crt;
+# ssl_certificate_key /etc/nginx/conf.d/domain.key;
+</code></pre>
+
+<p>And add these lines  </p>
+<pre><code># SSL
+ssl on;
+ssl_certificate /etc/nginx/conf.d/domain.crt;
+ssl_certificate_key /etc/nginx/conf.d/domain.key;
+</code></pre>
+
+<p>Save and exit the file.  </p>
+<h3 id="creating-and-signing-the-certificates">Creating and Signing the Certificates</h3>
+<p>Now we are going to create and sign the SSL certificate.  </p>
+<pre><code>cd ~/docker-registry/nginx
+</code></pre>
+
+<p>Generating the root key:  </p>
+<pre><code>openssl genrsa -out devdockerCA.key 2048
+</code></pre>
+
+<p>Generating the root certificate(Press Enter whenever it prompts):</p>
+<pre><code>openssl req -x509 -new -nodes -key devdockerCA.key -days 10000 -out devdockerCA.crt
+</code></pre>
+
+<p>Generating the key for the server:  </p>
+<pre><code>openssl genrsa -out domain.key 2048
+</code></pre>
+
+<p>Now we are going to send a certificate signing request.</p>
+<p>Press Enter whenever it prompts and When it asks for the <strong>"Common Name (eg, your name or your server's hostname) []:"</strong> type the ip of the machine or the server address (Which you have given in registry.conf near server_name)</p>
+<p><strong>Don't create a challenging password</strong></p>
+<pre><code>openssl req -new -key domain.key -out dev-docker-registry.com.csr
+</code></pre>
+
+<p>Now we are going to sign the certificates request  </p>
+<pre><code>openssl x509 -req -in dev-docker-registry.com.csr -CA devdockerCA.crt -CAkey devdockerCA.key -CAcreateserial -out domain.crt -days 10000
+</code></pre>
+
+<p>Since the certificates are signed by ourself not by the Certificate Authority we have to tell the docker client that we have the authorized certificates. Now we are going to do that locally by running the following commands,</p>
+<pre><code>update-ca-trust force-enable
+cp devdockerCA.crt /etc/pki/ca-trust/source/anchors/
+update-ca-trust extract
+</code></pre>
+
+<p>Restart the docker service and run the docker compose file.  </p>
+<pre><code>sudo service docker restart
+cd ~/docker-registry
+docker-compose up -d
+</code></pre>
+
+<p>To check the output:  </p>
+<pre><code>curl https://USERNAME:PASSWORD@[YOUR-DOMAIN]:5043/v2/
+</code></pre>
+
+<p>To stop and remove the container that have been created  </p>
+<pre><code>docker-compose stop  
+docker-compose rm
+</code></pre>
+
+<p>Changing the ports of the Nginx from 5043 to 443 in docker-compose.yml<br />
+Change it from  </p>
+<pre><code>    - 5043:443
+</code></pre>
+
+<p>to  </p>
+<pre><code>    - 443:443
+</code></pre>
+
+<p>Save and exit<br />
+Run the compose file  </p>
+<pre><code>docker-compose up -d
+</code></pre>
+
+<p>To check the output:  </p>
+<pre><code>curl https://&lt;YOURUSERNAME&gt;:&lt;YOURPASSWORD&gt;@YOUR-DOMAIN/v2/
+</code></pre>
+
+<h3 id="accessing-your-docker-registry-from-a-client-machine">Accessing Your Docker Registry from a Client Machine</h3>
+<p>Now we have to copy the devdockerCA file from the Registry VM to the Client VM so that we can access the Docker Registry.  </p>
+<pre><code>sudo cat /docker-registry/nginx/devdockerCA.crt
+</code></pre>
+
+<p>Copy the above data in the file  </p>
+<h4 id="on-client-machine">ON CLIENT MACHINE:</h4>
+<p>Paste the data present in the devdockerCA.crt in the below file  </p>
+<pre><code>vim /etc/pki/ca-trust/source/anchors/debdockerCA.crt
+</code></pre>
+
+<p>Now update the certificates and restart the docker service  </p>
+<pre><code>update-ca-trust extract
+service docker restart
+</code></pre>
+
+<p>Now we can access the Docker Registry that is present in the Other VM by  </p>
+<pre><code>docker login https://YOUR-DOMAIN
+</code></pre>
+
+<pre><code>Username: USERNAME
+
+Password: PASSWORD
+</code></pre>
+
+<p>After entering the correct username and their password we must get the following output  </p>
+<pre><code>&quot;Login Succeeded&quot;
+</code></pre>
+
+<p>Now lets just pull and run ubuntu images. Do some changes in it and try pushing it to the docker registry.  </p>
+<pre><code>docker run -t -i ubuntu /bin/bash
+touch initcron
+exit
+docker commit $(docker ps -lq) test-image
+</code></pre>
+
+<p>Now lets login to the registry and push the changes that we made in the ubuntu container.  </p>
+<pre><code>docker login https://YOUR-DOMAIN
+</code></pre>
+
+<pre><code>Username: USERNAME
+
+Password: PASSWORD
+</code></pre>
+
+<pre><code>docker tag test-image [YOUR-DOMAIN]/test-image
+docker push [YOUR-DOMAIN]/test-image
+</code></pre>
+
+<p>[Output]  </p>
+<pre><code>latest: digest: sha256:5ea1cfb425544011a3198757f9c6b283fa209a928caabe56063f85f3402363b4 size: 8008
+</code></pre>
+
+<p>Now check it we can go back to the server and follow the steps  </p>
+<pre><code>docker pull [YOUR-DOMAIN]/test-images
+docker run -t -i [YOUR-DOMAIN]/test-images /bin/bash
+ls
+</code></pre>
+
+<p>Now here we can see that the file which we created "initcron" is available.<br />
+The Docker Private Registry is successfully configured.  </p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

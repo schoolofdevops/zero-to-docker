@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Connecting apps with Docker Compose - Zero to Docker</title>
+  <title>Markdown cheatsheet - Zero to Docker</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Connecting apps with Docker Compose";
-    var mkdocs_page_input_path = "chapter7-linking_containers.md";
+    var mkdocs_page_name = "Markdown cheatsheet";
+    var mkdocs_page_input_path = "markdown_cheatsheet.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -77,21 +77,9 @@
                     
     <a class="" href="../dockerizing-facebooc/">Project - Dockerizing Facebooc</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Connecting apps with Docker Compose</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#building-application-stacks-defining-and-running-multi-container-apps">Building Application Stacks - Defining and Running Multi Container Apps</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#lab-creating-a-docker-compose-stack-for-the-vote-application">Lab: Creating a Docker Compose Stack for the Vote Application</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../chapter7-linking_containers/">Connecting apps with Docker Compose</a>
                 </li>
                 <li class="">
                     
@@ -156,12 +144,8 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Labs &raquo;</li>
-        
-      
     
-    <li>Connecting apps with Docker Compose</li>
+    <li>Markdown cheatsheet</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -171,124 +155,167 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="building-application-stacks-defining-and-running-multi-container-apps">Building Application Stacks - Defining and Running Multi Container Apps</h1>
-<h2 id="lab-creating-a-docker-compose-stack-for-the-vote-application">Lab: Creating a Docker Compose Stack for the Vote Application</h2>
-<p>Lets first launch redis and vote independently  and see if they automatically connect.</p>
-<pre><code>docker container run -idt --name redis redis:alpine
-
-docker container  run -idt  --name vote -P  schoolofdevops/vote
-
+                <p>{pagebreak}</p>
+<ul>
+<li>
+<h1 id="part">Part</h1>
+</li>
+</ul>
+<h1 id="section">Section</h1>
+<h2 id="sub-section">Sub Section</h2>
+<h3 id="sub-sub-section">Sub Sub Section</h3>
+<h4 id="sub-sub-sub-section">Sub Sub Sub Section</h4>
+<p>This is the
+first para  </p>
+<p>This is the 2nd para
+separated by a line<br />
+This is the 3rd para separated by 2 spaces at the end of line before  </p>
+<p>c&gt;  This is a centered text</p>
+<p><em>italic</em></p>
+<p><strong>bold</strong></p>
+<p><strong><em>bold-italic</em></strong></p>
+<p><strong><em>_underlined</em></strong>_</p>
+<ol>
+<li>Numbered list item 1</li>
+<li>
+<p>Numbered list item 2</p>
+<p>para between list item 4 indents,
+blank like after prev item, num seq continues</p>
+</li>
+<li>
+<p>Numbered list item 3  </p>
+</li>
+<li>
+<p>Bullet list item 1</p>
+</li>
+<li>Bullet list item 2</li>
+<li>Sub Item 2.1<ul>
+<li>Sub Sub item 2.1.1</li>
+</ul>
+</li>
+<li>Bullet list item 3</li>
+</ol>
+<p><img alt="caption" src="images/path_to_image" /></p>
+<p>Header</p>
+<p>: description of the header</p>
+<blockquote>
+<p><strong>This is a Block Quote</strong></p>
+<p>Block Quote gets indented</p>
+<blockquote>
+<p>block quote inside a block quote</p>
+</blockquote>
+</blockquote>
+<p><strong>Text Blocks</strong></p>
+<p>Asides</p>
+<p>A&gt; ## This is an aside
+A&gt;
+A&gt; This gets printed in a block</p>
+<p>Warnings</p>
+<p>W&gt; ## This is a Warning
+W&gt;
+W&gt; Always wear the seat belt</p>
+<p>Tips</p>
+<p>T&gt; ## This is a tip
+T&gt;
+T&gt; Bet for number 5 on that table</p>
+<p>Errors</p>
+<p>E&gt; ## This prints an error
+E&gt;
+E&gt; Oops ! You just barged into ladies toilet</p>
+<p>Information</p>
+<p>I&gt; ## This is to print info
+I&gt;
+I&gt;  For your eyes only</p>
+<p>Questions</p>
+<p>Q&gt; ## This prints questions
+Q&gt;
+Q&gt; What came first, chicken or the engg?</p>
+<p>Discussions</p>
+<p>D&gt; ## This is for Discussions
+D&gt;
+D&gt; Lets talk about Life of Pie</p>
+<p>Exercises</p>
+<p>X&gt; ## This is for exercises
+X&gt;
+X&gt; 10 mins on treadmill
+X&gt; followed by two sets of pushups</p>
+<p><strong>Writing Code</strong></p>
+<p>Method 1 : 4 space indentation</p>
+<pre><code>echo "this starts with 4 indents"
+ls -l
+cat /etc/issue
+uptime
+</code></pre>
+<p>Method 2: 8 tildes</p>
+<pre><code>echo &quot;this has 8 tildes on the top and bottom&quot;
+echo &quot;8 tildes is a best practice, but any no. will do &quot;
+uptime
+ls -l
+cat /etc/issue
 </code></pre>
 
-<p>Try registering a vote with the voteapp UI.  Does it work?</p>
-<p>You could also try if <strong>vote</strong> is able to discover <strong>redis</strong> by running</p>
-<pre><code>docker exec vote ping redis
-
+<p>Method 3 : include code from file</p>
+<p>&lt;&lt;(code/sample_code.sh)</p>
+<p>&lt;&lt;<a href="code/sample_code.sh">sample_code_with_title</a></p>
+<p>Method 4 : lp-code style</p>
+<p>{title="Listing ", lang=html, linenos=off}</p>
+<pre><code>echo &quot;this is autocompleted by leanpub plugin for atom&quot;
+uptime
+df -h
+ls -l  
 </code></pre>
 
-<h3 id="linking-services">Linking services</h3>
-<p>Remove vote container created above if any, and re launch it with the link.</p>
-<pre><code>docker container rm -f vote
-
-docker container  run -idt  --name vote --link redis:redis -P  schoolofdevops/vote
-</code></pre>
-
-<p>Launch worker app as well with the link</p>
-<pre><code>
-docker container  run -idt  --name worker --link redis:redis -P  schoolofdevops/vote-worker
-
-
-docker logs worker
-</code></pre>
-
-<h3 id="launching-inter-linked-services-with-compose-spec">Launching inter linked services with Compose spec</h3>
-<p>Lets now create a docker-compose spec and launch the services with docker-compose utility.</p>
-<p>Create a directory to keep the compose files. Lets say <strong>stack</strong></p>
-<pre><code>mkdir stack
-cd stack
-</code></pre>
-
-<p>file: docker-compose.yml</p>
-<pre><code>vote:
-  image: schoolofdevops/vote
-  links:
-    - redis:redis
-  ports:
-    - 80   
-
-redis:
-  image: redis:alpine
-
-worker:
-  image: schoolofdevops/vote-worker
-  links:
-    - redis:redis
-
-</code></pre>
-
-<p>Syntax check</p>
-<pre><code>docker-compose config
-</code></pre>
-
-<p>Now launch it with</p>
-<pre><code>docker-compose up -d
-
-docker-compose ps
-
-</code></pre>
-
-<p>file: docker-compose-v3.yml</p>
-<pre><code>version: &quot;3&quot;
-
-networks:
-  vote:
-    driver: bridge
-
-services:
-  vote:
-    image: schoolofdevops/vote
-    ports:
-      - 80
-    networks:
-      - vote
-    depends_on:
-      - redis
-
-  redis:
-    image: redis:alpine
-    networks:
-      - vote
-
-  worker:
-    image: schoolofdevops/vote-worker
-    networks:
-      - vote
-    depends_on:
-      - redis
-</code></pre>
-
-<p>Launch the new stack with,</p>
-<pre><code>docker-compose -f docker-compose-v3.yml up -d
-
-
-docker-compose -f docker-compose-v3.yml ps
-
-
-docker-compose -f docker-compose-v3.yml down
-</code></pre>
+<p>Method 5: back ticks ``</p>
+<p><code>echo "this is a short code snippet"</code></p>
+<p><strong>Footnotes</strong></p>
+<p>This is a text para
+and I am writing a
+footnote[^tag1] here</p>
+<p>Later on I add the footnote as</p>
+<p>[^tag1]: description about the footnote. Should contain blank line before and after</p>
+<p><strong>Crosslinks</strong></p>
+<p>This is a cross link to {##Sub Section}</p>
+<p><strong>Table</strong></p>
+<table>
+<thead>
+<tr>
+<th>header1</th>
+<th>header2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r1-c1</td>
+<td>r1-c2</td>
+</tr>
+<tr>
+<td>r2-c1</td>
+<td>r2-c2</td>
+</tr>
+<tr>
+<td>r3-c1</td>
+<td>r3-c2</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th align="left">Header One</th>
+<th align="left">Header Two</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Item One</td>
+<td align="left">Item Two</td>
+</tr>
+</tbody>
+</table>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../chapterx-docker-networking/" class="btn btn-neutral float-right" title="Docker Single Host Networking">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../dockerizing-facebooc/" class="btn btn-neutral" title="Project - Dockerizing Facebooc"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -312,10 +339,6 @@ docker-compose -f docker-compose-v3.yml down
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../dockerizing-facebooc/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../chapterx-docker-networking/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
