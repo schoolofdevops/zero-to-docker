@@ -1,10 +1,11 @@
-site_name: Zero to Docker
+site_name: Docker Tutorial
 pages:
   - Home: "index.md"
   - Labs:
      - Getting Started with Docker: "chapter4-getting_started.md"
      - Container Operations : "chapter5-container_operations.md"
      - Dockerizing your Apps : "chapter6-dockerizing-your-apps.md"
+     - Project - Dockerizing Voteapp : "dockerizing-voteapp.md"
      - Project - Dockerizing Facebooc : "dockerizing-facebooc.md"
      - Connecting apps with Docker Compose : "chapter7-linking_containers.md"
      - Docker Single Host Networking: "chapterx-docker-networking.md"
@@ -20,3 +21,18 @@ docs_dir: manuscript
 theme: readthedocs
 plugins:
     - search
+site_url: http://docker-tutorial.schoolofdevops.com/
+site_author: Gourav Shah
+site_description: Docker Tutorial by School of Devops
+google_analytics: ['UA-36802546-16', 'docker-tutorial.schoolofdevops.com']
+repo_url: https://github.com/schoolofdevops/zero-to-docker
+edit_uri: edit/master/manuscript
+copyright: Copyright @ 2017-2020 Gourav Shah, School of Devops. Some rights reserved. License CC BY-NC-SA
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/schoolofdevops'
+    - type: 'twitter'
+      link: 'https://twitter.com/gouravhah'
+    - type: 'linkedin'
+      link: 'https://www.linkedin.com/in/gouravshah'

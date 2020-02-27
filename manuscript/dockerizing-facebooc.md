@@ -1,7 +1,7 @@
 
 ## Project : Build a docker image for Facebooc app 
 
-Facebooc (https://github.com/schoolofdevops/facebooc) is a app written in C. Its a simple, web based social media application clone and used SQLite as a database backend. As a devops engineer, you have been tasked with building an image for facebooc app and publish it to docker hub registry. 
+[Facebooc](https://github.com/schoolofdevops/facebooc) is a app written in C. Its a simple, web based social media application clone and used SQLite as a database backend. As a devops engineer, you have been tasked with building an image for facebooc app and publish it to docker hub registry. 
 
 
 ### Approach 1: Building docker image for facebooc app manually
