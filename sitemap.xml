@@ -1,78 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/chapter4-getting_started/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/chapter5-container_operations/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/chapter6-dockerizing-your-apps/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/dockerizing-voteapp/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/dockerizing-facebooc/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/chapter7-linking_containers/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/chapterx-docker-networking/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/persistent-volumes/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/swarm-quickdive/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/distributing_images/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/swarm-networking-deepdive/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/troubleshooting-toolkit/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/docker-swarm-ucp-troubleshooting/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>None</loc>
-     <lastmod>2019-01-15</lastmod>
+     <loc>http://docker-tutorial.schoolofdevops.com/docker-security/</loc>
+     <lastmod>2020-02-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
